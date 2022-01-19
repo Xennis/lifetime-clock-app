@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 void main() {
   runApp(const LifetimeApp());
@@ -47,6 +48,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   DateTime selectedDate = DateTime.now();
+  int selectedAge = 100;
 
   Future<void> _selectDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
@@ -70,7 +72,7 @@ class _HomePageState extends State<HomePage> {
     // fast, so that you can just rebuild anything that needs updating rather
     // than having to individually change instances of widgets.
     return DefaultTabController(
-      initialIndex: 1,
+      initialIndex: 0,
       length: 2,
       child: Scaffold(
         appBar: AppBar(
@@ -102,6 +104,30 @@ class _HomePageState extends State<HomePage> {
                     onPressed: () => _selectDate(context),
                     child: const Text('Select date'),
                   ),
+                  Text("$selectedAge"),
+                  TextField(
+                    onChanged: (inputValue) {
+                      int? age = int.tryParse(inputValue);
+                      // Avoid having to render too many boxes.
+                      if (age != null && age <= 150) {
+                        setState(() {
+                          selectedAge = age;
+                        });
+                      }
+                    },
+                    maxLength: 3,
+                    decoration: const InputDecoration(
+                      labelText: "Enter your number",
+                      //errorStyle: TextStyle(),
+                      // errorText: 'Please enter something'
+                    ),
+                    keyboardType: TextInputType.number,
+                    inputFormatters: <TextInputFormatter>[
+                      FilteringTextInputFormatter.digitsOnly,
+                      //FilteringTextInputFormatter.allow(
+                      //    RegExp(r'[1-9][0-9]?$|^200$'))
+                    ],
+                  )
                 ],
               ),
             ),
