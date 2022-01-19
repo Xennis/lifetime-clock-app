@@ -46,6 +46,20 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  DateTime selectedDate = DateTime.now();
+
+  Future<void> _selectDate(BuildContext context) async {
+    final DateTime? picked = await showDatePicker(
+        context: context,
+        initialDate: selectedDate,
+        firstDate: DateTime(1900),
+        lastDate: DateTime.now());
+    if (picked != null && picked != selectedDate) {
+      setState(() {
+        selectedDate = picked;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -74,12 +88,24 @@ class _HomePageState extends State<HomePage> {
             ],
           ),
         ),
-        body: const TabBarView(
+        body: TabBarView(
           children: <Widget>[
             Center(
-              child: Text("It's cloudy here"),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  Text("${selectedDate.toLocal()}".split(' ')[0]),
+                  const SizedBox(
+                    height: 20.0,
+                  ),
+                  ElevatedButton(
+                    onPressed: () => _selectDate(context),
+                    child: const Text('Select date'),
+                  ),
+                ],
+              ),
             ),
-            Center(
+            const Center(
               child: Text("It's rainy here"),
             ),
           ],
