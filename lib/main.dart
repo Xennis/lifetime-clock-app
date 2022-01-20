@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -49,6 +51,8 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   DateTime selectedDate = DateTime.now();
   int selectedAge = 100;
+  DateTime now = DateTime.now();
+  Timer? _timer;
 
   Future<void> _selectDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
@@ -63,6 +67,34 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
+  Duration fuu() {
+    DateTime deathDay = DateTime(
+        selectedDate.year + selectedAge, selectedDate.month, selectedDate.day);
+    return deathDay.difference(now);
+  }
+
+  int years() {
+    DateTime deathDay = DateTime(
+        selectedDate.year + selectedAge, selectedDate.month, selectedDate.day);
+    return deathDay.year - now.year;
+  }
+
+  @override
+  void initState() {
+    _timer = Timer.periodic(const Duration(seconds: 1), (result) {
+      setState(() {
+        now = DateTime.now();
+      });
+    });
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _timer?.cancel();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     // This method is rerun every time setState is called, for instance as done
@@ -71,9 +103,11 @@ class _HomePageState extends State<HomePage> {
     // The Flutter framework has been optimized to make rerunning build methods
     // fast, so that you can just rebuild anything that needs updating rather
     // than having to individually change instances of widgets.
+    TextStyle numbers = const TextStyle(fontSize: 30.0);
+
     return DefaultTabController(
-      initialIndex: 0,
-      length: 2,
+      initialIndex: 1,
+      length: 3,
       child: Scaffold(
         appBar: AppBar(
           // Here we take the value from the MyHomePage object that was created by
@@ -82,16 +116,30 @@ class _HomePageState extends State<HomePage> {
           bottom: const TabBar(
             tabs: <Widget>[
               Tab(
-                icon: Icon(Icons.cloud_outlined),
+                icon: Icon(Icons.article),
               ),
-              Tab(
-                icon: Icon(Icons.beach_access_sharp),
-              ),
+              Tab(icon: Icon(Icons.apps)),
+              Tab(icon: Icon(Icons.settings)),
             ],
           ),
         ),
         body: TabBarView(
           children: <Widget>[
+            Center(
+              child: Column(
+                children: [
+                  Text("Olympia: ${(years() / 4).floor()}", style: numbers),
+                  Text("Years: ${years()}", style: numbers),
+                  Text("Days: ${fuu().inDays}", style: numbers),
+                  Text("Hours: ${fuu().inHours}", style: numbers),
+                  Text("Minutes: ${fuu().inMinutes}", style: numbers),
+                  Text("Seconds: ${fuu().inSeconds}", style: numbers),
+                ],
+              ),
+            ),
+            Center(
+              child: BoxView(selectedAge, 31),
+            ),
             Center(
               child: Column(
                 mainAxisSize: MainAxisSize.min,
@@ -106,6 +154,8 @@ class _HomePageState extends State<HomePage> {
                   ),
                   Text("$selectedAge"),
                   TextField(
+                    //controller: TextEditingController()
+                    //  ..text = selectedAge.toString(),
                     onChanged: (inputValue) {
                       int? age = int.tryParse(inputValue);
                       // Avoid having to render too many boxes.
@@ -131,12 +181,62 @@ class _HomePageState extends State<HomePage> {
                 ],
               ),
             ),
-            const Center(
-              child: Text("It's rainy here"),
-            ),
           ],
         ),
       ),
     );
   }
+}
+
+class BoxView extends StatelessWidget {
+  const BoxView(this.max, this.current, {Key? key}) : super(key: key);
+
+  final int max;
+  final int current;
+
+  static const Color past = Colors.blueAccent;
+  static const Color active = Colors.pinkAccent;
+  static const Color future = Colors.greenAccent;
+
+  @override
+  Widget build(BuildContext context) {
+    List<Widget> years = [];
+    for (var i = 0; i <= max; i++) {
+      years.add(CustomPaint(
+        size: const Size(25, 25),
+        painter: MyPainter(color(i)),
+      ));
+    }
+
+    return Wrap(
+      spacing: 10.0,
+      runSpacing: 10.0,
+      children: years,
+    );
+  }
+
+  Color color(int i) {
+    if (i < current) {
+      return past;
+    }
+    if (i == current) {
+      return active;
+    }
+    return future;
+  }
+}
+
+class MyPainter extends CustomPainter {
+  const MyPainter(this.color, {Listenable? repaint}) : super(repaint: repaint);
+
+  final Color color;
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    Paint paint = Paint()..color = color;
+    canvas.drawRect(const Offset(0, 0) & size, paint);
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) => true;
 }
