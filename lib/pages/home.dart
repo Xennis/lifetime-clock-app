@@ -1,20 +1,10 @@
 import 'dart:async';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:lifetime/pages/config.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
-
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -23,14 +13,14 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   DateTime selectedDate = DateTime.now();
   int selectedAge = 100;
-  DateTime now = DateTime.now();
-  Timer? _timer;
+  DateTime _now = DateTime.now();
+  late Timer _timer;
 
   @override
   void initState() {
     _timer = Timer.periodic(const Duration(seconds: 1), (result) {
       setState(() {
-        now = DateTime.now();
+        _now = DateTime.now();
       });
     });
     super.initState();
@@ -38,58 +28,35 @@ class _HomePageState extends State<HomePage> {
 
   @override
   void dispose() {
-    _timer?.cancel();
+    _timer.cancel();
     super.dispose();
-  }
-
-  Future<void> _selectDate(BuildContext context) async {
-    final DateTime? picked = await showDatePicker(
-        context: context,
-        initialDate: selectedDate,
-        firstDate: DateTime(1900),
-        lastDate: DateTime.now());
-    if (picked != null && picked != selectedDate) {
-      setState(() {
-        selectedDate = picked;
-      });
-    }
   }
 
   Duration fuu() {
     DateTime deathDay = DateTime(
         selectedDate.year + selectedAge, selectedDate.month, selectedDate.day);
-    return deathDay.difference(now);
+    return deathDay.difference(_now);
   }
 
   int years() {
     DateTime deathDay = DateTime(
         selectedDate.year + selectedAge, selectedDate.month, selectedDate.day);
-    return deathDay.year - now.year;
+    return deathDay.year - _now.year;
   }
 
   @override
   Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
     return DefaultTabController(
       initialIndex: 0,
-      length: 3,
+      length: 2,
       child: Scaffold(
         appBar: AppBar(
-          // Here we take the value from the MyHomePage object that was created by
-          // the App.build method, and use it to set our appbar title.
-          title: const Text('Lifetime'),
+          title: const Text("Lifetime"),
+          actions: _appBarActions(),
           bottom: const TabBar(
             tabs: <Widget>[
-              Tab(
-                icon: Icon(Icons.article),
-              ),
+              Tab(icon: Icon(Icons.article)),
               Tab(icon: Icon(Icons.apps)),
-              Tab(icon: Icon(Icons.settings)),
             ],
           ),
         ),
@@ -101,51 +68,34 @@ class _HomePageState extends State<HomePage> {
             Center(
               child: _BoxView(selectedAge, 31),
             ),
-            Center(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: <Widget>[
-                  Text("${selectedDate.toLocal()}".split(' ')[0]),
-                  const SizedBox(
-                    height: 20.0,
-                  ),
-                  ElevatedButton(
-                    onPressed: () => _selectDate(context),
-                    child: const Text('Select date'),
-                  ),
-                  Text("$selectedAge"),
-                  TextField(
-                    //controller: TextEditingController()
-                    //  ..text = selectedAge.toString(),
-                    onChanged: (inputValue) {
-                      int? age = int.tryParse(inputValue);
-                      // Avoid having to render too many boxes.
-                      if (age != null && age <= 150) {
-                        setState(() {
-                          selectedAge = age;
-                        });
-                      }
-                    },
-                    maxLength: 3,
-                    decoration: const InputDecoration(
-                      labelText: "Enter your number",
-                      //errorStyle: TextStyle(),
-                      // errorText: 'Please enter something'
-                    ),
-                    keyboardType: TextInputType.number,
-                    inputFormatters: <TextInputFormatter>[
-                      FilteringTextInputFormatter.digitsOnly,
-                      //FilteringTextInputFormatter.allow(
-                      //    RegExp(r'[1-9][0-9]?$|^200$'))
-                    ],
-                  )
-                ],
-              ),
-            ),
           ],
         ),
       ),
     );
+  }
+
+  List<Widget> _appBarActions() {
+    return <Widget>[
+      PopupMenuButton<String>(
+        onSelected: (String selected) {
+          if (selected == "settings") {
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => const ConfigPage()));
+          }
+        },
+        itemBuilder: (BuildContext context) {
+          return [
+            const PopupMenuItem<String>(
+              value: "settings",
+              child: ListTile(
+                leading: Icon(Icons.settings),
+                title: Text("Settings"),
+              ),
+            )
+          ];
+        },
+      ),
+    ];
   }
 }
 
