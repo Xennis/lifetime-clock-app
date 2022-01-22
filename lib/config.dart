@@ -7,6 +7,10 @@ class LifetimeConfig {
 
   DateTime birthdate;
   int age;
+
+  DateTime getDeathDay() {
+    return DateTime(birthdate.year + age, birthdate.month, birthdate.day);
+  }
 }
 
 

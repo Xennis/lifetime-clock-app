@@ -34,16 +34,19 @@ class _HomePageState extends State<HomePage> {
     _timer.cancel();
     super.dispose();
   }
-  DateTime getDeathDay() {
-    final birthdate = widget.config.birthdate;
-    return DateTime(birthdate.year + widget.config.age, birthdate.month, birthdate.day);
-  }
 
   @override
   Widget build(BuildContext context) {
-    final DateTime deathDay = getDeathDay();
-    final Duration durationLeft = deathDay.difference(_now);
-    final int yearsLeft = deathDay.year - _now.year;
+    final DateTime deathDay = widget.config.getDeathDay();
+    Duration durationLeft = deathDay.difference(_now);
+    if (durationLeft.isNegative) {
+      durationLeft = Duration.zero;
+    }
+    int yearsLeft = deathDay.year - _now.year;
+    if (yearsLeft < 0) {
+      yearsLeft = 0;
+    }
+    int current = widget.config.age - yearsLeft;
 
     return DefaultTabController(
       initialIndex: 0,
@@ -61,11 +64,13 @@ class _HomePageState extends State<HomePage> {
         ),
         body: TabBarView(
           children: <Widget>[
-            Center(
+            Padding(
+              padding: const EdgeInsets.fromLTRB(10, 30, 10, 20),
               child: _NumberView(yearsLeft, durationLeft),
             ),
-            Center(
-              child: _BoxView(widget.config.age, 31),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(10, 30, 10, 20),
+              child: _BoxView(widget.config.age, current),
             ),
           ],
         ),
@@ -78,8 +83,10 @@ class _HomePageState extends State<HomePage> {
       PopupMenuButton<String>(
         onSelected: (String selected) {
           if (selected == "settings") {
-            Navigator.push(context,
-                MaterialPageRoute(builder: (context) => ConfigPage(widget.config)));
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => ConfigPage(widget.config)));
           }
         },
         itemBuilder: (BuildContext context) {
@@ -104,7 +111,7 @@ class _NumberView extends StatelessWidget {
   final int years;
   final Duration duration;
 
-  final TextStyle _pairStyle = const TextStyle(fontSize: 30.0);
+  final TextStyle _pairStyle = const TextStyle(fontSize: 28.0);
 
   @override
   Widget build(BuildContext context) {
@@ -121,7 +128,7 @@ class _NumberView extends StatelessWidget {
     pairs.forEach((label, value) {
       rows.add(TableRow(children: [
         Padding(
-          padding: const EdgeInsets.only(right: 10.0),
+          padding: const EdgeInsets.only(right: 12),
           child: Text(
             label,
             style: _pairStyle,
@@ -132,8 +139,13 @@ class _NumberView extends StatelessWidget {
       ]));
     });
 
-    return Table(
-      children: rows,
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        Table(
+          children: rows,
+        )
+      ],
     );
   }
 }
@@ -160,14 +172,20 @@ class _BoxView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final List<Widget> boxes = [];
-    for (var i = 0; i <= max; i++) {
+    for (var i = 0; i < max; i++) {
       boxes.add(_box(i));
     }
 
-    return Wrap(
-      spacing: 10.0,
-      runSpacing: 10.0,
-      children: boxes,
+    return Center(
+      child: Column(
+        children: [
+          Wrap(
+            spacing: 10.0,
+            runSpacing: 10.0,
+            children: boxes,
+          )
+        ],
+      ),
     );
   }
 

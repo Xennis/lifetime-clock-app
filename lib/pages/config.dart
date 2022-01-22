@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:lifetime/config.dart';
+import 'package:numberpicker/numberpicker.dart';
 
 class ConfigPage extends StatefulWidget {
   const ConfigPage(this.config, {Key? key}) : super(key: key);
@@ -11,18 +12,12 @@ class ConfigPage extends StatefulWidget {
 }
 
 class _ConfigPageState extends State<ConfigPage> {
-  late TextEditingController _controller;
+  late int _selectedAge;
 
   @override
   void initState() {
+    _selectedAge = widget.config.age;
     super.initState();
-    _controller = TextEditingController();
-  }
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
   }
 
   @override
@@ -32,7 +27,9 @@ class _ConfigPageState extends State<ConfigPage> {
           title: const Text("Settings"),
         ),
         body: Center(
-          child: Column(
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(10, 30, 10, 20),
+            child: Column(
             children: [
               ListTile(
                 leading: const Icon(Icons.date_range),
@@ -41,12 +38,13 @@ class _ConfigPageState extends State<ConfigPage> {
                 onTap: () => _selectBirthday(context),
               ),
               ListTile(
-                leading: const Icon(Icons.health_and_safety),
+                leading: const Icon(Icons.health_and_safety_outlined),
                 title: const Text("Age"),
                 subtitle: Text("${widget.config.age}"),
                 onTap: () => _selectAge(context),
               ),
             ],
+          ),
           ),
         ));
   }
@@ -66,53 +64,38 @@ class _ConfigPageState extends State<ConfigPage> {
   }
 
   void _selectAge(BuildContext context) async {
-    /*
-                        TextField(
-                          decoration: const InputDecoration(
-                            labelText: "Enter your number",
-                            //errorStyle: TextStyle(),
-                            // errorText: 'Please enter something'
-                          ),
-                          inputFormatters: <TextInputFormatter>[
-                            FilteringTextInputFormatter.digitsOnly,
-                            //FilteringTextInputFormatter.allow(
-                            //    RegExp(r'[1-9][0-9]?$|^200$'))
-                          ],
-                        )
-                        */
-
     final int? picked = await showDialog<int>(
         context: context,
         builder: (context) => AlertDialog(
               title: const Text("Age"),
-              content: TextField(
-                autofocus: true,
-                controller: _controller,
-                decoration: const InputDecoration(
-                  hintText: "Enter your age",
-                ),
-                keyboardType: TextInputType.number,
-                maxLength: 3,
+              content: StatefulBuilder(
+                builder: (context, dialogState) {
+                  return NumberPicker(
+                    value: _selectedAge,
+                    minValue: 1,
+                    maxValue: 150,
+                    onChanged: (int value) {
+                      //setState(() => _selectedAge = value);
+                      dialogState(() => _selectedAge = value);
+                    },
+                  );
+                },
               ),
               actions: [
                 TextButton(
                   child: const Text("OK"),
                   onPressed: () {
-                    int? age = int.tryParse(_controller.text);
-                    if (age != null && age > 150) {
-                      age = null;
-                    }
-                    Navigator.of(context).pop(age);
+                    Navigator.of(context).pop(_selectedAge);
                   },
                 )
               ],
             ));
-    if (picked != null && picked != widget.config.age) {
+
+    if (picked != null) {
+      LifetimePreferences.setAge(picked);
       setState(() {
-        LifetimePreferences.setAge(picked);
         widget.config.age = picked;
       });
     }
   }
 }
-
