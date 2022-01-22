@@ -1,0 +1,19 @@
+{
+  "appTitle": "Lifetime",
+  "@appTitle": {
+    "description": "Title of the application"
+  },
+  "settingsPage": "Settings",
+  "@settingsPage": {
+    "description": "Navigation label and title for settings page"
+  },
+  "birthday": "Birthday",
+  "age": "Age",
+  "ok": "ok",
+  "olympia": "Olympia",
+  "years": "Years",
+  "days": "Days",
+  "hours": "Hours",
+  "minutes": "Minutes",
+  "seconds": "Seconds"
+}

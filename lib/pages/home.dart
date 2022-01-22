@@ -1,8 +1,10 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:lifetime/config.dart';
-import 'package:lifetime/pages/config.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
+import '../config.dart';
+import 'config.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage(this.config, {Key? key}) : super(key: key);
@@ -37,6 +39,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final DateTime deathDay = widget.config.getDeathDay();
     Duration durationLeft = deathDay.difference(_now);
     if (durationLeft.isNegative) {
@@ -53,17 +56,17 @@ class _HomePageState extends State<HomePage> {
       length: 2,
       child: Scaffold(
         appBar: AppBar(
-          title: const Text("Lifetime"),
-          actions: _appBarActions(),
+          title: Text(l10n.appTitle),
+          actions: _appBarActions(l10n),
           bottom: const TabBar(
-            tabs: <Widget>[
+            tabs: [
               Tab(icon: Icon(Icons.article)),
               Tab(icon: Icon(Icons.apps)),
             ],
           ),
         ),
         body: TabBarView(
-          children: <Widget>[
+          children: [
             Padding(
               padding: const EdgeInsets.fromLTRB(10, 30, 10, 20),
               child: _NumberView(yearsLeft, durationLeft),
@@ -78,11 +81,12 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  List<Widget> _appBarActions() {
-    return <Widget>[
+  List<Widget> _appBarActions(AppLocalizations l10n) {
+    const keySettings = 'settings';
+    return [
       PopupMenuButton<String>(
         onSelected: (String selected) {
-          if (selected == "settings") {
+          if (selected == keySettings) {
             Navigator.push(
                 context,
                 MaterialPageRoute(
@@ -91,11 +95,11 @@ class _HomePageState extends State<HomePage> {
         },
         itemBuilder: (BuildContext context) {
           return [
-            const PopupMenuItem<String>(
-              value: "settings",
+            PopupMenuItem<String>(
+              value: keySettings,
               child: ListTile(
-                leading: Icon(Icons.settings),
-                title: Text("Settings"),
+                leading: const Icon(Icons.settings),
+                title: Text(l10n.settingsPage),
               ),
             )
           ];
@@ -115,13 +119,14 @@ class _NumberView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final Map<String, String> pairs = {
-      "Olympia": "${(years / 4).floor()}",
-      "Years": "$years",
-      "Days": "${duration.inDays}",
-      "Hours": "${duration.inHours}",
-      "Minutes": "${duration.inMinutes}",
-      "Seconds": "${duration.inSeconds}"
+      l10n.olympia: "${(years / 4).floor()}",
+      l10n.years: "$years",
+      l10n.days: "${duration.inDays}",
+      l10n.hours: "${duration.inHours}",
+      l10n.minutes: "${duration.inMinutes}",
+      l10n.seconds: "${duration.inSeconds}"
     };
 
     final List<TableRow> rows = [];

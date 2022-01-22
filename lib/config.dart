@@ -16,8 +16,8 @@ class LifetimeConfig {
 
 class LifetimePreferences {
 
-  static const String _keyBirthdate = "birthdate";
-  static const String _keyAge = "age";
+  static const String _keyBirthdate = 'birthdate';
+  static const String _keyAge = 'age';
 
   static Future<LifetimeConfig?> get() async {
     final DateTime? birthdate = await _getBirthdate();

@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:lifetime/config.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:numberpicker/numberpicker.dart';
+
+import '../config.dart';
+
 
 class ConfigPage extends StatefulWidget {
   const ConfigPage(this.config, {Key? key}) : super(key: key);
@@ -22,9 +25,10 @@ class _ConfigPageState extends State<ConfigPage> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Scaffold(
         appBar: AppBar(
-          title: const Text("Settings"),
+          title: Text(l10n.settingsPage),
         ),
         body: Center(
           child: Padding(
@@ -33,13 +37,13 @@ class _ConfigPageState extends State<ConfigPage> {
             children: [
               ListTile(
                 leading: const Icon(Icons.date_range),
-                title: const Text("Birthday"),
+                title: Text(l10n.birthday),
                 subtitle: Text("${widget.config.birthdate}".split(' ')[0]),
                 onTap: () => _selectBirthday(context),
               ),
               ListTile(
                 leading: const Icon(Icons.health_and_safety_outlined),
-                title: const Text("Age"),
+                title: Text(l10n.age),
                 subtitle: Text("${widget.config.age}"),
                 onTap: () => _selectAge(context),
               ),
@@ -64,10 +68,11 @@ class _ConfigPageState extends State<ConfigPage> {
   }
 
   void _selectAge(BuildContext context) async {
+    final l10n = AppLocalizations.of(context)!;
     final int? picked = await showDialog<int>(
         context: context,
         builder: (context) => AlertDialog(
-              title: const Text("Age"),
+              title: Text(l10n.age),
               content: StatefulBuilder(
                 builder: (context, dialogState) {
                   return NumberPicker(
@@ -83,7 +88,7 @@ class _ConfigPageState extends State<ConfigPage> {
               ),
               actions: [
                 TextButton(
-                  child: const Text("OK"),
+                  child: Text(l10n.ok.toUpperCase()),
                   onPressed: () {
                     Navigator.of(context).pop(_selectedAge);
                   },
