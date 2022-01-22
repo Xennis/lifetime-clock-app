@@ -1,20 +1,22 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:lifetime/config.dart';
 import 'package:lifetime/pages/config.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({Key? key}) : super(key: key);
+  const HomePage(this.config, {Key? key}) : super(key: key);
+
+  final LifetimeConfig config;
 
   @override
   State<HomePage> createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
-  DateTime selectedDate = DateTime.now();
-  int selectedAge = 100;
-  DateTime _now = DateTime.now();
-  late Timer _timer;
+  late final Timer _timer;
+
+  late DateTime _now;
 
   @override
   void initState() {
@@ -23,6 +25,7 @@ class _HomePageState extends State<HomePage> {
         _now = DateTime.now();
       });
     });
+    _now = DateTime.now();
     super.initState();
   }
 
@@ -31,21 +34,17 @@ class _HomePageState extends State<HomePage> {
     _timer.cancel();
     super.dispose();
   }
-
-  Duration fuu() {
-    DateTime deathDay = DateTime(
-        selectedDate.year + selectedAge, selectedDate.month, selectedDate.day);
-    return deathDay.difference(_now);
-  }
-
-  int years() {
-    DateTime deathDay = DateTime(
-        selectedDate.year + selectedAge, selectedDate.month, selectedDate.day);
-    return deathDay.year - _now.year;
+  DateTime getDeathDay() {
+    final birthdate = widget.config.birthdate;
+    return DateTime(birthdate.year + widget.config.age, birthdate.month, birthdate.day);
   }
 
   @override
   Widget build(BuildContext context) {
+    final DateTime deathDay = getDeathDay();
+    final Duration durationLeft = deathDay.difference(_now);
+    final int yearsLeft = deathDay.year - _now.year;
+
     return DefaultTabController(
       initialIndex: 0,
       length: 2,
@@ -63,10 +62,10 @@ class _HomePageState extends State<HomePage> {
         body: TabBarView(
           children: <Widget>[
             Center(
-              child: _NumberView(years(), fuu()),
+              child: _NumberView(yearsLeft, durationLeft),
             ),
             Center(
-              child: _BoxView(selectedAge, 31),
+              child: _BoxView(widget.config.age, 31),
             ),
           ],
         ),
@@ -80,7 +79,7 @@ class _HomePageState extends State<HomePage> {
         onSelected: (String selected) {
           if (selected == "settings") {
             Navigator.push(context,
-                MaterialPageRoute(builder: (context) => const ConfigPage()));
+                MaterialPageRoute(builder: (context) => ConfigPage(widget.config)));
           }
         },
         itemBuilder: (BuildContext context) {

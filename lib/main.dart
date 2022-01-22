@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lifetime/config.dart';
 import 'package:lifetime/pages/home.dart';
 
 void main() {
@@ -15,7 +16,19 @@ class LifetimeApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const HomePage(),
+      home: FutureBuilder<LifetimeConfig?>(
+        future: LifetimePreferences.get(),
+        builder: (BuildContext context, AsyncSnapshot<LifetimeConfig?> snapshot) {
+          final LifetimeConfig? config = snapshot.data;
+          if (config != null) {
+            return HomePage(config);
+          }
+          if (config == null || snapshot.hasError) {
+            return HomePage(LifetimeConfig(DateTime.now(), 100));
+          }
+          return const Center(child: CircularProgressIndicator());
+        }
+      ),
     );
   }
 }

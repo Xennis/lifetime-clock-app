@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:lifetime/config.dart';
 
 class ConfigPage extends StatefulWidget {
-  const ConfigPage({Key? key}) : super(key: key);
+  const ConfigPage(this.config, {Key? key}) : super(key: key);
+
+  final LifetimeConfig config;
 
   @override
   State<ConfigPage> createState() => _ConfigPageState();
 }
 
 class _ConfigPageState extends State<ConfigPage> {
-  DateTime selectedDate = DateTime.now();
-  int selectedAge = 100;
-
   late TextEditingController _controller;
 
   @override
@@ -37,13 +37,13 @@ class _ConfigPageState extends State<ConfigPage> {
               ListTile(
                 leading: const Icon(Icons.date_range),
                 title: const Text("Birthday"),
-                subtitle: Text("${selectedDate.toLocal()}".split(' ')[0]),
+                subtitle: Text("${widget.config.birthdate}".split(' ')[0]),
                 onTap: () => _selectBirthday(context),
               ),
               ListTile(
                 leading: const Icon(Icons.health_and_safety),
                 title: const Text("Age"),
-                subtitle: Text("$selectedAge"),
+                subtitle: Text("${widget.config.age}"),
                 onTap: () => _selectAge(context),
               ),
             ],
@@ -54,12 +54,13 @@ class _ConfigPageState extends State<ConfigPage> {
   Future<void> _selectBirthday(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
         context: context,
-        initialDate: selectedDate,
+        initialDate: widget.config.birthdate,
         firstDate: DateTime(1900),
         lastDate: DateTime.now());
-    if (picked != null && picked != selectedDate) {
+    if (picked != null && picked != widget.config.birthdate) {
       setState(() {
-        selectedDate = picked;
+        LifetimePreferences.setBirthdate(picked);
+        widget.config.birthdate = picked;
       });
     }
   }
@@ -106,10 +107,12 @@ class _ConfigPageState extends State<ConfigPage> {
                 )
               ],
             ));
-    if (picked != null && picked != selectedAge) {
+    if (picked != null && picked != widget.config.age) {
       setState(() {
-        selectedAge = picked;
+        LifetimePreferences.setAge(picked);
+        widget.config.age = picked;
       });
     }
   }
 }
+
