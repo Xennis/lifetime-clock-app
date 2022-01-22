@@ -33,6 +33,34 @@
       }
     }
   },
+  "imprint": "Legal notice",
+  "@imprint": {
+    "description": "Legal notice. The required \"Impressum\" due to German law.",
+    "type": "text",
+    "placeholders": {}
+  },
+  "imprintTmgText": "Information in accordance with § {paragraphNumber} TMG",
+  "@imprintTmgText": {
+    "description": "Disclaimer headline on the imprint page",
+    "type": "text",
+    "placeholders": {
+      "paragraphNumber": {
+        "example": "5"
+      }
+    }
+  },
+  "imprintDisclaimerLabel": "Disclaimer",
+  "@imprintDisclaimerLabel": {
+    "description": "Disclaimer headline on the imprint page",
+    "type": "text",
+    "placeholders": {}
+  },
+  "imprintDisclaimerText": "We decline any liability for the contents of external links, for which only the respective webmasters are responsible.",
+  "@imprintDisclaimerText": {
+    "description": "Disclaimer text on the imprint page",
+    "type": "text",
+    "placeholders": {}
+  },
   "birthday": "Birthday",
   "age": "Age",
   "ok": "ok",

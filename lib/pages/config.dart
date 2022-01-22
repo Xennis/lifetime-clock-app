@@ -41,7 +41,7 @@ class _ConfigPageState extends State<ConfigPage> {
                   onTap: () => _selectBirthday(context),
                 ),
                 ListTile(
-                  leading: const Icon(Icons.health_and_safety_outlined),
+                  leading: const Icon(Icons.health_and_safety),
                   title: Text(l10n.age),
                   subtitle: Text("${widget.config.age}"),
                   onTap: () => _selectAge(context),
@@ -58,7 +58,12 @@ class _ConfigPageState extends State<ConfigPage> {
                   applicationName: l10n.appTitle,
                   applicationVersion: l10n.aboutVersion('0.1.0'),
                   applicationLegalese: l10n.aboutLegalese('Xennis'),
-                )
+                ),
+                ListTile(
+                  leading: const Icon(Icons.info),
+                  title: Text(l10n.imprint),
+                  onTap: () => _showImprint(context),
+                ),
               ],
             ),
           ),
@@ -114,5 +119,56 @@ class _ConfigPageState extends State<ConfigPage> {
         widget.config.age = picked;
       });
     }
+  }
+
+  void _showImprint(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+              title: Text(l10n.imprint),
+              content: Column(
+                // otherwise the dialog fills the whole hight
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  RichText(
+                    text: TextSpan(
+                      style: const TextStyle(color: Colors.black),
+                      children: <InlineSpan>[
+                        TextSpan(
+                          text: '${l10n.imprintTmgText('5')}:\n\n',
+                        ),
+                        const TextSpan(
+                            text:
+                                'Fabian Rosenthal\nc/o skriptspektor e. U.\nRobert-Preußler-Straße 13 / TOP 1\n5020 Salzburg\nAT – Österreich\ncode [at] xennis.org\n\n'),
+                        TextSpan(
+                          text: '${l10n.imprintDisclaimerLabel}:',
+                          style: const TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                        TextSpan(
+                          text: ' ${l10n.imprintDisclaimerText}',
+                        ),
+                        //TextSpan(text: '${l10n.imprintGdprApplyText} '),
+                        //TextSpan(
+                        //  text: l10n.gdprPrivacyPolicy,
+                        //  style: const TextStyle(color: Colors.blue),
+                        //  recognizer: TapGestureRecognizer()
+                        //    ..onTap = () => launch(privacyPolicyUrl),
+                        //),
+                        //const TextSpan(text: '.')
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+              actions: [
+                TextButton(
+                  child: Text(l10n.ok.toUpperCase()),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                )
+              ],
+            ));
   }
 }
