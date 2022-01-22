@@ -7,6 +7,32 @@
   "@settingsPage": {
     "description": "Navigation label and title for settings page"
   },
+  "aboutPage": "About the app",
+  "@aboutPage": {
+    "description": "Label for about page",
+    "type": "text",
+    "placeholders": {}
+  },
+  "aboutVersion": "Version {version}",
+  "@aboutVersion": {
+    "description": "App version on the about page",
+    "type": "text",
+    "placeholders": {
+      "version": {
+        "example": "1.4.0"
+      }
+    }
+  },
+  "aboutLegalese": "Developed by {name}",
+  "@aboutLegalese": {
+    "description": "Developer attribution",
+    "type": "text",
+    "placeholders": {
+      "name": {
+        "example": "Xennis"
+      }
+    }
+  },
   "birthday": "Birthday",
   "age": "Age",
   "ok": "ok",

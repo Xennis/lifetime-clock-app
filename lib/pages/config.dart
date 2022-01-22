@@ -4,7 +4,6 @@ import 'package:numberpicker/numberpicker.dart';
 
 import '../config.dart';
 
-
 class ConfigPage extends StatefulWidget {
   const ConfigPage(this.config, {Key? key}) : super(key: key);
 
@@ -34,21 +33,34 @@ class _ConfigPageState extends State<ConfigPage> {
           child: Padding(
             padding: const EdgeInsets.fromLTRB(10, 30, 10, 20),
             child: Column(
-            children: [
-              ListTile(
-                leading: const Icon(Icons.date_range),
-                title: Text(l10n.birthday),
-                subtitle: Text("${widget.config.birthdate}".split(' ')[0]),
-                onTap: () => _selectBirthday(context),
-              ),
-              ListTile(
-                leading: const Icon(Icons.health_and_safety_outlined),
-                title: Text(l10n.age),
-                subtitle: Text("${widget.config.age}"),
-                onTap: () => _selectAge(context),
-              ),
-            ],
-          ),
+              children: [
+                ListTile(
+                  leading: const Icon(Icons.date_range),
+                  title: Text(l10n.birthday),
+                  subtitle: Text("${widget.config.birthdate}".split(' ')[0]),
+                  onTap: () => _selectBirthday(context),
+                ),
+                ListTile(
+                  leading: const Icon(Icons.health_and_safety_outlined),
+                  title: Text(l10n.age),
+                  subtitle: Text("${widget.config.age}"),
+                  onTap: () => _selectAge(context),
+                ),
+                const Divider(),
+                AboutListTile(
+                  child: Text(l10n.aboutPage),
+                  icon: const Icon(Icons.explore),
+                  //applicationIcon: Image.asset(
+                  //  'assets/app-icon.png',
+                  //  width: 65,
+                  //  height: 65,
+                  //),
+                  applicationName: l10n.appTitle,
+                  applicationVersion: l10n.aboutVersion('0.1.0'),
+                  applicationLegalese: l10n.aboutLegalese('Xennis'),
+                )
+              ],
+            ),
           ),
         ));
   }
