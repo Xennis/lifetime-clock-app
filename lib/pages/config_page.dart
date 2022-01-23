@@ -69,11 +69,11 @@ class _ConfigPageState extends State<ConfigPage> {
                 AboutListTile(
                   child: Text(l10n.aboutPage),
                   icon: const Icon(Icons.explore),
-                  //applicationIcon: Image.asset(
-                  //  'assets/app-icon.png',
-                  //  width: 65,
-                  //  height: 65,
-                  //),
+                  applicationIcon: Image.asset(
+                    'assets/app-icon.png',
+                    width: 65,
+                    height: 65,
+                  ),
                   applicationName: l10n.appTitle,
                   applicationVersion: l10n.aboutVersion('0.1.0'),
                   applicationLegalese: l10n.aboutLegalese('Xennis'),
