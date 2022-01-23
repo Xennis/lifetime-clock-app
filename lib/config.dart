@@ -2,11 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class LifetimeConfig {
-  LifetimeConfig(this.birthdate, this.age, this.themeMode);
+  LifetimeConfig(this.birthdate, this.age);
 
   DateTime birthdate;
   int age;
-  ThemeMode themeMode;
 
   DateTime getDeathDay() {
     return DateTime(birthdate.year + age, birthdate.month, birthdate.day);
@@ -21,9 +20,8 @@ class LifetimePreferences {
   static Future<LifetimeConfig?> get() async {
     final DateTime? birthdate = await _getBirthdate();
     final int? age = await _getAge();
-    final ThemeMode? themeMode = await _getThemeMode();
-    if (birthdate != null && age != null && themeMode != null) {
-      return LifetimeConfig(birthdate, age, themeMode);
+    if (birthdate != null && age != null) {
+      return LifetimeConfig(birthdate, age);
     }
     return Future.value(null);
   }
@@ -52,7 +50,7 @@ class LifetimePreferences {
     return prefs.setInt(_keyAge, age);
   }
 
-  static Future<ThemeMode?> _getThemeMode() async {
+  static Future<ThemeMode?> getThemeMode() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     final int? raw = prefs.getInt(_keyThemeMode);
     if (raw == null) {

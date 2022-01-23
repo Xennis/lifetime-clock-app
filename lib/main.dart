@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:provider/provider.dart';
 
 import 'config.dart';
-import 'pages/home.dart';
+import 'pages/home_page.dart';
+import 'provider/theme_provider.dart';
 
 void main() {
   runApp(const LifetimeApp());
@@ -14,13 +16,9 @@ class LifetimeApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const ThemeMode defaultThemeMode = ThemeMode.light;
-    final ValueNotifier<ThemeMode> themeModeNotifier =
-        ValueNotifier(defaultThemeMode);
-
-    return ValueListenableBuilder<ThemeMode>(
-        valueListenable: themeModeNotifier,
-        builder: (_, themeMode, _child) {
+    return ChangeNotifierProvider<ThemeModeProvider>(
+        create: (_) => ThemeModeProvider(),
+        child: Builder(builder: (context) {
           return MaterialApp(
             onGenerateTitle: (context) =>
                 AppLocalizations.of(context)!.appTitle,
@@ -32,18 +30,16 @@ class LifetimeApp extends StatelessWidget {
               brightness: Brightness.dark,
               primarySwatch: Colors.orange,
             ),
-            themeMode: themeMode,
+            themeMode: Provider.of<ThemeModeProvider>(context).getMode,
             home: FutureBuilder<LifetimeConfig?>(
                 future: LifetimePreferences.get(),
                 builder: (context, snapshot) {
                   final LifetimeConfig? config = snapshot.data;
                   if (config != null) {
-                    return HomePage(config, themeModeNotifier);
+                    return HomePage(config);
                   }
                   if (config == null || snapshot.hasError) {
-                    return HomePage(
-                        LifetimeConfig(DateTime.now(), 100, defaultThemeMode),
-                        themeModeNotifier);
+                    return HomePage(LifetimeConfig(DateTime.now(), 100));
                   }
                   return const Center(child: CircularProgressIndicator());
                 }),
@@ -55,6 +51,6 @@ class LifetimeApp extends StatelessWidget {
             ],
             supportedLocales: AppLocalizations.supportedLocales,
           );
-        });
+        }));
   }
 }

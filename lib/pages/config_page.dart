@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:numberpicker/numberpicker.dart';
+import 'package:provider/provider.dart';
 
+import '../provider/theme_provider.dart';
 import '../config.dart';
 
 class ConfigPage extends StatefulWidget {
-  const ConfigPage(this.config, this.themeMode, {Key? key}) : super(key: key);
+  const ConfigPage(this.config, {Key? key}) : super(key: key);
 
   final LifetimeConfig config;
-  final ValueNotifier<ThemeMode> themeMode;
 
   @override
   State<ConfigPage> createState() => _ConfigPageState();
@@ -25,7 +26,9 @@ class _ConfigPageState extends State<ConfigPage> {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
+    final AppLocalizations l10n = AppLocalizations.of(context)!;
+    final ThemeModeProvider themeModeProvider =
+        Provider.of<ThemeModeProvider>(context);
 
     return Scaffold(
         appBar: AppBar(
@@ -49,24 +52,19 @@ class _ConfigPageState extends State<ConfigPage> {
                   onTap: () => _selectAge(context),
                 ),
                 const Divider(),
-                ValueListenableBuilder<ThemeMode>(
-                    valueListenable: widget.themeMode,
-                    builder: (context, themeMode, _child) {
-                      return ListTile(
-                        leading: const Icon(Icons.color_lens),
-                        title: Text(l10n.optionDarkTheme),
-                        //subtitle: Text("${widget.config.age}"),
-                        trailing: Switch(
-                            value: themeMode == ThemeMode.dark,
-                            onChanged: (value) {
-                              final ThemeMode themeMode =
-                                  value ? ThemeMode.dark : ThemeMode.light;
-                              LifetimePreferences.setThemeMode(themeMode);
-                              widget.themeMode.value = themeMode;
-                            }),
-                        onTap: () => {},
-                      );
-                    }),
+                ListTile(
+                  leading: const Icon(Icons.color_lens),
+                  title: Text(l10n.optionDarkTheme),
+                  subtitle: Text(l10n.optionDarkThemeDesc),
+                  trailing: Switch(
+                      value: themeModeProvider.getMode == ThemeMode.dark,
+                      onChanged: (value) {
+                        final ThemeMode themeMode =
+                            value ? ThemeMode.dark : ThemeMode.light;
+                        themeModeProvider.setMode(themeMode);
+                      }),
+                  onTap: () => {},
+                ),
                 const Divider(),
                 AboutListTile(
                   child: Text(l10n.aboutPage),
@@ -106,7 +104,7 @@ class _ConfigPageState extends State<ConfigPage> {
   }
 
   void _selectAge(BuildContext context) async {
-    final l10n = AppLocalizations.of(context)!;
+    final AppLocalizations l10n = AppLocalizations.of(context)!;
     final int? picked = await showDialog<int>(
         context: context,
         builder: (context) => AlertDialog(
@@ -143,7 +141,7 @@ class _ConfigPageState extends State<ConfigPage> {
   }
 
   void _showImprint(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
+    final AppLocalizations l10n = AppLocalizations.of(context)!;
     showDialog(
         context: context,
         builder: (context) => AlertDialog(

@@ -65,6 +65,10 @@
   "@optionDarkTheme": {
     "description": "Option to enable the dark theme"
   },
+  "optionDarkThemeDesc": "Enforce dark brightness",
+  "@optionDarkThemeDesc": {
+    "description": "Option to enable the dark theme"
+  },
   "birthday": "Birthday",
   "age": "Age",
   "ok": "ok",

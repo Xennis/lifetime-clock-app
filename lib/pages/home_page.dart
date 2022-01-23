@@ -4,13 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../config.dart';
-import 'config.dart';
+import 'config_page.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage(this.config, this.themeMode, {Key? key}) : super(key: key);
+  const HomePage(this.config, {Key? key}) : super(key: key);
 
   final LifetimeConfig config;
-  final ValueNotifier<ThemeMode> themeMode;
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -40,7 +39,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
+    final AppLocalizations l10n = AppLocalizations.of(context)!;
     final DateTime deathDay = widget.config.getDeathDay();
     Duration durationLeft = deathDay.difference(_now);
     if (durationLeft.isNegative) {
@@ -91,8 +90,7 @@ class _HomePageState extends State<HomePage> {
             Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (context) =>
-                        ConfigPage(widget.config, widget.themeMode)));
+                    builder: (context) => ConfigPage(widget.config)));
           }
         },
         itemBuilder: (BuildContext context) {
@@ -121,7 +119,7 @@ class _NumberView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
+    final AppLocalizations l10n = AppLocalizations.of(context)!;
     final Map<String, String> pairs = {
       l10n.olympia: "${(years / 4).floor()}",
       l10n.years: "$years",
