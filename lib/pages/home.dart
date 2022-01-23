@@ -7,9 +7,10 @@ import '../config.dart';
 import 'config.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage(this.config, {Key? key}) : super(key: key);
+  const HomePage(this.config, this.themeMode, {Key? key}) : super(key: key);
 
   final LifetimeConfig config;
+  final ValueNotifier<ThemeMode> themeMode;
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -90,7 +91,8 @@ class _HomePageState extends State<HomePage> {
             Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (context) => ConfigPage(widget.config)));
+                    builder: (context) =>
+                        ConfigPage(widget.config, widget.themeMode)));
           }
         },
         itemBuilder: (BuildContext context) {

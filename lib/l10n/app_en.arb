@@ -61,6 +61,10 @@
     "type": "text",
     "placeholders": {}
   },
+  "optionDarkTheme": "Dark theme",
+  "@optionDarkTheme": {
+    "description": "Option to enable the dark theme"
+  },
   "birthday": "Birthday",
   "age": "Age",
   "ok": "ok",

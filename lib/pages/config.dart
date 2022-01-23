@@ -5,9 +5,10 @@ import 'package:numberpicker/numberpicker.dart';
 import '../config.dart';
 
 class ConfigPage extends StatefulWidget {
-  const ConfigPage(this.config, {Key? key}) : super(key: key);
+  const ConfigPage(this.config, this.themeMode, {Key? key}) : super(key: key);
 
   final LifetimeConfig config;
+  final ValueNotifier<ThemeMode> themeMode;
 
   @override
   State<ConfigPage> createState() => _ConfigPageState();
@@ -25,6 +26,7 @@ class _ConfigPageState extends State<ConfigPage> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
+
     return Scaffold(
         appBar: AppBar(
           title: Text(l10n.settingsPage),
@@ -46,6 +48,25 @@ class _ConfigPageState extends State<ConfigPage> {
                   subtitle: Text("${widget.config.age}"),
                   onTap: () => _selectAge(context),
                 ),
+                const Divider(),
+                ValueListenableBuilder<ThemeMode>(
+                    valueListenable: widget.themeMode,
+                    builder: (context, themeMode, _child) {
+                      return ListTile(
+                        leading: const Icon(Icons.color_lens),
+                        title: Text(l10n.optionDarkTheme),
+                        //subtitle: Text("${widget.config.age}"),
+                        trailing: Switch(
+                            value: themeMode == ThemeMode.dark,
+                            onChanged: (value) {
+                              final ThemeMode themeMode =
+                                  value ? ThemeMode.dark : ThemeMode.light;
+                              LifetimePreferences.setThemeMode(themeMode);
+                              widget.themeMode.value = themeMode;
+                            }),
+                        onTap: () => {},
+                      );
+                    }),
                 const Divider(),
                 AboutListTile(
                   child: Text(l10n.aboutPage),
@@ -77,8 +98,8 @@ class _ConfigPageState extends State<ConfigPage> {
         firstDate: DateTime(1900),
         lastDate: DateTime.now());
     if (picked != null && picked != widget.config.birthdate) {
+      LifetimePreferences.setBirthdate(picked);
       setState(() {
-        LifetimePreferences.setBirthdate(picked);
         widget.config.birthdate = picked;
       });
     }
@@ -133,7 +154,7 @@ class _ConfigPageState extends State<ConfigPage> {
                 children: <Widget>[
                   RichText(
                     text: TextSpan(
-                      style: const TextStyle(color: Colors.black),
+                      style: Theme.of(context).textTheme.bodyText1,
                       children: <InlineSpan>[
                         TextSpan(
                           text: '${l10n.imprintTmgText('5')}:\n\n',

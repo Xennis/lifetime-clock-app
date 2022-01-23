@@ -1,29 +1,29 @@
-
-
+import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class LifetimeConfig {
-  LifetimeConfig(this.birthdate, this.age);
+  LifetimeConfig(this.birthdate, this.age, this.themeMode);
 
   DateTime birthdate;
   int age;
+  ThemeMode themeMode;
 
   DateTime getDeathDay() {
     return DateTime(birthdate.year + age, birthdate.month, birthdate.day);
   }
 }
 
-
 class LifetimePreferences {
-
   static const String _keyBirthdate = 'birthdate';
   static const String _keyAge = 'age';
+  static const String _keyThemeMode = 'themeMode';
 
   static Future<LifetimeConfig?> get() async {
     final DateTime? birthdate = await _getBirthdate();
     final int? age = await _getAge();
-    if (birthdate != null && age != null) {
-      return LifetimeConfig(birthdate, age);
+    final ThemeMode? themeMode = await _getThemeMode();
+    if (birthdate != null && age != null && themeMode != null) {
+      return LifetimeConfig(birthdate, age, themeMode);
     }
     return Future.value(null);
   }
@@ -39,7 +39,7 @@ class LifetimePreferences {
 
   static Future<bool> setBirthdate(DateTime birthdate) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
-    return prefs.setString(_keyBirthdate, birthdate.toIso8601String());  
+    return prefs.setString(_keyBirthdate, birthdate.toIso8601String());
   }
 
   static Future<int?> _getAge() async {
@@ -50,5 +50,19 @@ class LifetimePreferences {
   static Future<bool> setAge(int age) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     return prefs.setInt(_keyAge, age);
+  }
+
+  static Future<ThemeMode?> _getThemeMode() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    final int? raw = prefs.getInt(_keyThemeMode);
+    if (raw == null) {
+      return Future.value(null);
+    }
+    return ThemeMode.values[raw];
+  }
+
+  static Future<bool> setThemeMode(ThemeMode mode) async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.setInt(_keyThemeMode, mode.index);
   }
 }
