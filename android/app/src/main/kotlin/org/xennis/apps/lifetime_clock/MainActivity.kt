@@ -1,4 +1,4 @@
-package com.example.lifetime
+package org.xennis.apps.lifetime_clock
 
 import io.flutter.embedding.android.FlutterActivity
 
