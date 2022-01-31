@@ -116,13 +116,18 @@ class _ConfigPageState extends State<ConfigPage> {
                     minValue: 1,
                     maxValue: 150,
                     onChanged: (int value) {
-                      //setState(() => _selectedAge = value);
                       dialogState(() => _selectedAge = value);
                     },
                   );
                 },
               ),
               actions: [
+                TextButton(
+                  child: Text(l10n.cancel.toUpperCase()),
+                  onPressed: () {
+                    Navigator.of(context).pop(null);
+                  },
+                ),
                 TextButton(
                   child: Text(l10n.ok.toUpperCase()),
                   onPressed: () {
@@ -136,6 +141,10 @@ class _ConfigPageState extends State<ConfigPage> {
       LifetimePreferences.setAge(picked);
       setState(() {
         widget.config.age = picked;
+      });
+    } else {
+      setState(() {
+        _selectedAge = widget.config.age;
       });
     }
   }
