@@ -6,16 +6,16 @@ import 'package:provider/provider.dart';
 import '../provider/theme_provider.dart';
 import '../config.dart';
 
-class ConfigPage extends StatefulWidget {
-  const ConfigPage(this.config, {Key? key}) : super(key: key);
+class SettingsPage extends StatefulWidget {
+  const SettingsPage(this.config, {Key? key}) : super(key: key);
 
   final LifetimeConfig config;
 
   @override
-  State<ConfigPage> createState() => _ConfigPageState();
+  State<SettingsPage> createState() => _SettingsPageState();
 }
 
-class _ConfigPageState extends State<ConfigPage> {
+class _SettingsPageState extends State<SettingsPage> {
   late int _selectedAge;
 
   @override

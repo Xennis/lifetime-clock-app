@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../config.dart';
-import 'config_page.dart';
+import 'settings_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage(this.config, {Key? key}) : super(key: key);
@@ -90,7 +90,7 @@ class _HomePageState extends State<HomePage> {
               Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => ConfigPage(widget.config)));
+                      builder: (context) => SettingsPage(widget.config)));
             },
             child: const Icon(
               Icons.settings,
