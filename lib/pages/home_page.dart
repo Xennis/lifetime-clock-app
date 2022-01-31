@@ -82,6 +82,22 @@ class _HomePageState extends State<HomePage> {
   }
 
   List<Widget> _appBarActions(AppLocalizations l10n) {
+    return [
+      Padding(
+          padding: const EdgeInsets.only(right: 15.0),
+          child: GestureDetector(
+            onTap: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => ConfigPage(widget.config)));
+            },
+            child: const Icon(
+              Icons.settings,
+            ),
+          )),
+    ];
+    /*
     const keySettings = 'settings';
     return [
       PopupMenuButton<String>(
@@ -106,6 +122,7 @@ class _HomePageState extends State<HomePage> {
         },
       ),
     ];
+    */
   }
 }
 
