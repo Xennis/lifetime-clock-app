@@ -71,10 +71,11 @@ class _HomePageState extends State<HomePage> {
               padding: const EdgeInsets.fromLTRB(10, 30, 10, 20),
               child: _NumberView(yearsLeft, durationLeft),
             ),
-            Padding(
+            SingleChildScrollView(
+                child: Padding(
               padding: const EdgeInsets.fromLTRB(10, 30, 10, 20),
               child: _BoxView(widget.config.age, current),
-            ),
+            )),
           ],
         ),
       ),
