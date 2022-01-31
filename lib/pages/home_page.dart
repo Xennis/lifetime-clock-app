@@ -84,18 +84,20 @@ class _HomePageState extends State<HomePage> {
   List<Widget> _appBarActions(AppLocalizations l10n) {
     return [
       Padding(
-          padding: const EdgeInsets.only(right: 15.0),
-          child: GestureDetector(
-            onTap: () {
+          padding: const EdgeInsets.only(right: 3.0),
+          child: IconButton(
+            icon: const Icon(
+              Icons.settings,
+            ),
+            tooltip: l10n.settingsPage,
+            onPressed: () {
               Navigator.push(
                   context,
                   MaterialPageRoute(
                       builder: (context) => SettingsPage(widget.config)));
             },
-            child: const Icon(
-              Icons.settings,
-            ),
-          )),
+          ),
+      )
     ];
     /*
     const keySettings = 'settings';
