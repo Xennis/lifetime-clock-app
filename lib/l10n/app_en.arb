@@ -69,6 +69,10 @@
   "@optionDarkThemeDesc": {
     "description": "Option to enable the dark theme"
   },
+  "boxViewInfoText": "Every box represents 1 year. Blue for the past, green the future and red the current one.",
+  "@boxViewInfoText": {
+    "description": "Explains the user what is shown on the box view."
+  },
   "birthday": "Birthday",
   "age": "Age",
   "ok": "ok",

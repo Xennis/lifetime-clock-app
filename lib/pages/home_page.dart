@@ -84,19 +84,19 @@ class _HomePageState extends State<HomePage> {
   List<Widget> _appBarActions(AppLocalizations l10n) {
     return [
       Padding(
-          padding: const EdgeInsets.only(right: 3.0),
-          child: IconButton(
-            icon: const Icon(
-              Icons.settings,
-            ),
-            tooltip: l10n.settingsPage,
-            onPressed: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => SettingsPage(widget.config)));
-            },
+        padding: const EdgeInsets.only(right: 3.0),
+        child: IconButton(
+          icon: const Icon(
+            Icons.settings,
           ),
+          tooltip: l10n.settingsPage,
+          onPressed: () {
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => SettingsPage(widget.config)));
+          },
+        ),
       )
     ];
     /*
@@ -195,6 +195,7 @@ class _BoxView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final AppLocalizations l10n = AppLocalizations.of(context)!;
     final List<Widget> boxes = [];
     for (var i = 0; i < max; i++) {
       boxes.add(_box(i));
@@ -207,7 +208,22 @@ class _BoxView extends StatelessWidget {
             spacing: 10.0,
             runSpacing: 10.0,
             children: boxes,
-          )
+          ),
+          const Padding(padding: EdgeInsets.only(bottom: 20.0)),
+          const Divider(),
+          Row(
+            children: [
+              Column(
+                children: const [
+                  Icon(
+                    Icons.info_outline,
+                  )
+                ],
+              ),
+              const Padding(padding: EdgeInsets.only(right: 10.0)),
+              Flexible(child: Text(l10n.boxViewInfoText))
+            ],
+          ),
         ],
       ),
     );
