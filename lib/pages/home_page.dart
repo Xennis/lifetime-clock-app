@@ -131,24 +131,29 @@ class _HomePageState extends State<HomePage> {
   }
 }
 
-class _NumberView extends StatelessWidget {
+class _NumberView extends StatefulWidget {
   const _NumberView(this.years, this.duration, {Key? key}) : super(key: key);
 
   final int years;
   final Duration duration;
 
+  @override
+  State<_NumberView> createState() => _NumberViewState();
+}
+
+class _NumberViewState extends State<_NumberView> {
   final TextStyle _pairStyle = const TextStyle(fontSize: 28.0);
 
   @override
   Widget build(BuildContext context) {
     final AppLocalizations l10n = AppLocalizations.of(context)!;
     final Map<String, String> pairs = {
-      l10n.olympia: "${(years / 4).floor()}",
-      l10n.years: "$years",
-      l10n.days: "${duration.inDays}",
-      l10n.hours: "${duration.inHours}",
-      l10n.minutes: "${duration.inMinutes}",
-      l10n.seconds: "${duration.inSeconds}"
+      l10n.olympia: "${(widget.years / 4).floor()}",
+      l10n.years: "${widget.years}",
+      l10n.days: "${widget.duration.inDays}",
+      l10n.hours: "${widget.duration.inHours}",
+      l10n.minutes: "${widget.duration.inMinutes}",
+      l10n.seconds: "${widget.duration.inSeconds}"
     };
 
     final List<TableRow> rows = [];
