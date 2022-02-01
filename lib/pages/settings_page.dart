@@ -34,9 +34,9 @@ class _SettingsPageState extends State<SettingsPage> {
         appBar: AppBar(
           title: Text(l10n.settingsPage),
         ),
-        body: Center(
+        body: SingleChildScrollView(
           child: Padding(
-            padding: const EdgeInsets.fromLTRB(10, 30, 10, 20),
+            padding: const EdgeInsets.fromLTRB(10, 20, 10, 20),
             child: Column(
               children: [
                 ListTile(

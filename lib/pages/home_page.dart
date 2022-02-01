@@ -67,9 +67,11 @@ class _HomePageState extends State<HomePage> {
         ),
         body: TabBarView(
           children: [
-            Padding(
-              padding: const EdgeInsets.fromLTRB(10, 30, 10, 20),
-              child: _NumberView(yearsLeft, durationLeft),
+            SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(10, 30, 10, 20),
+                child: _NumberView(yearsLeft, durationLeft),
+              ),
             ),
             SingleChildScrollView(
                 child: Padding(
