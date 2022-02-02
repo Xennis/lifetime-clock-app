@@ -209,7 +209,7 @@ class _NumberDefaultView extends StatelessWidget {
   Widget build(BuildContext context) {
     final AppLocalizations l10n = AppLocalizations.of(context)!;
     final Map<String, String> pairs = {
-      l10n.olympia: "${(years / 4).floor()}",
+      l10n.olympics: "${(years / 4).floor()}",
       l10n.years: "$years",
       l10n.days: "${duration.inDays}",
       l10n.hours: "${duration.inHours}",
