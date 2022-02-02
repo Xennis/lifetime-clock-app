@@ -13,12 +13,12 @@ class ThemeModeProvider extends ChangeNotifier {
 
   void setMode(ThemeMode mode) async {
     _mode = mode;
-    await LifetimePreferences.setThemeMode(mode);
+    await AppPrefs.setThemeMode(mode);
     notifyListeners();
   }
 
   _loadFromPrefs() async {
-    _mode = await LifetimePreferences.getThemeMode() ?? ThemeMode.system;
+    _mode = await AppPrefs.getThemeMode() ?? ThemeMode.system;
     notifyListeners();
   }
 }

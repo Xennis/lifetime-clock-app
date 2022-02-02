@@ -69,6 +69,26 @@
   "@optionDarkThemeDesc": {
     "description": "Option to enable the dark theme"
   },
+  "numberViewBirthToNow": "{birthday} ~ now",
+  "@numberViewBirthToNow": {
+    "description": "Label for selecting clock from birthday to the current date",
+    "type": "text",
+    "placeholders": {
+      "birthday": {
+        "example": "23.04.2001"
+      }
+    }
+  },
+  "numberViewNowToDeath": "now ~ {deathDay}",
+  "@numberViewNowToDeath": {
+    "description": "Label for selecting clock from current date to death",
+    "type": "text",
+    "placeholders": {
+      "deathDay": {
+        "example": "23.04.2001"
+      }
+    }
+  },
   "boxViewInfoText": "Every box represents 1 year. Blue for the past, green the future and red the current one.",
   "@boxViewInfoText": {
     "description": "Explains the user what is shown on the box view."

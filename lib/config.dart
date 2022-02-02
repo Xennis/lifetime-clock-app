@@ -12,10 +12,16 @@ class LifetimeConfig {
   }
 }
 
-class LifetimePreferences {
+enum NumberViewMode {
+  birthToNow,
+  nowToDeath,
+}
+
+class AppPrefs {
   static const String _keyBirthdate = 'birthdate';
   static const String _keyAge = 'age';
   static const String _keyThemeMode = 'themeMode';
+  static const String _keyNumberViewMode = 'numberViewMode';
 
   static Future<LifetimeConfig?> get() async {
     final DateTime? birthdate = await _getBirthdate();
@@ -62,5 +68,19 @@ class LifetimePreferences {
   static Future<bool> setThemeMode(ThemeMode mode) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     return prefs.setInt(_keyThemeMode, mode.index);
+  }
+
+  static Future<NumberViewMode?> getNumberViewMode() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    final int? raw = prefs.getInt(_keyNumberViewMode);
+    if (raw == null) {
+      return Future.value(null);
+    }
+    return NumberViewMode.values[raw];
+  }
+
+  static Future<bool> setNumberViewMode(NumberViewMode mode) async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.setInt(_keyNumberViewMode, mode.index);
   }
 }

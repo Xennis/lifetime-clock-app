@@ -96,7 +96,7 @@ class _SettingsPageState extends State<SettingsPage> {
         firstDate: DateTime(1900),
         lastDate: DateTime.now());
     if (picked != null && picked != widget.config.birthdate) {
-      LifetimePreferences.setBirthdate(picked);
+      AppPrefs.setBirthdate(picked);
       setState(() {
         widget.config.birthdate = picked;
       });
@@ -138,7 +138,7 @@ class _SettingsPageState extends State<SettingsPage> {
             ));
 
     if (picked != null) {
-      LifetimePreferences.setAge(picked);
+      AppPrefs.setAge(picked);
       setState(() {
         widget.config.age = picked;
       });

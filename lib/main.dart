@@ -32,7 +32,7 @@ class LifetimeApp extends StatelessWidget {
             ),
             themeMode: Provider.of<ThemeModeProvider>(context).getMode,
             home: FutureBuilder<LifetimeConfig?>(
-                future: LifetimePreferences.get(),
+                future: AppPrefs.get(),
                 builder: (context, snapshot) {
                   final LifetimeConfig? config = snapshot.data;
                   if (config != null) {
