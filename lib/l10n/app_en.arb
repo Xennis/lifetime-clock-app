@@ -79,7 +79,7 @@
     "type": "text",
     "placeholders": {
       "birthday": {
-        "example": "23.04.2001"
+        "example": "2001-04-23"
       }
     }
   },
@@ -89,7 +89,7 @@
     "type": "text",
     "placeholders": {
       "deathDay": {
-        "example": "23.04.2001"
+        "example": "2001-04-23"
       }
     }
   },
