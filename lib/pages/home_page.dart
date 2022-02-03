@@ -60,7 +60,7 @@ class _HomePageState extends State<HomePage> {
           children: [
             SingleChildScrollView(
               child: Padding(
-                padding: const EdgeInsets.fromLTRB(10, 30, 10, 20),
+                padding: const EdgeInsets.fromLTRB(10, 15, 10, 20),
                 child: _NumberView(
                   now: _now,
                   birthday: widget.config.birthdate,
@@ -70,7 +70,7 @@ class _HomePageState extends State<HomePage> {
             ),
             SingleChildScrollView(
                 child: Padding(
-              padding: const EdgeInsets.fromLTRB(10, 30, 10, 20),
+              padding: const EdgeInsets.fromLTRB(10, 25, 10, 20),
               child: _BoxView(widget.config.age, current),
             )),
           ],
@@ -190,6 +190,7 @@ class _NumberViewState extends State<_NumberView> {
                       child: Text(e.value),
                     ))
                 .toList()),
+        const Padding(padding: EdgeInsets.only(bottom: 15.0)),
         _NumberDefaultView(years, duration),
       ],
     );
