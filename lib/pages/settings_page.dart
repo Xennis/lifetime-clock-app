@@ -75,7 +75,7 @@ class _SettingsPageState extends State<SettingsPage> {
                   //  height: 65,
                   //),
                   applicationName: l10n.appTitle,
-                  applicationVersion: l10n.aboutVersion('0.1.0'),
+                  applicationVersion: l10n.aboutVersion('1.0.0'),
                   applicationLegalese: l10n.aboutLegalese('Xennis'),
                 ),
                 ListTile(
@@ -168,7 +168,7 @@ class _SettingsPageState extends State<SettingsPage> {
                         ),
                         const TextSpan(
                             text:
-                                'Fabian Rosenthal\nc/o skriptspektor e. U.\nRobert-Preußler-Straße 13 / TOP 1\n5020 Salzburg\nAT – Österreich\ncode [at] xennis.org\n\n'),
+                                'Fabian Rosenthal\nSchäferkampsallee 61\n20357\nHamburg\ncode [at] xennis.org\n\n'),
                         TextSpan(
                           text: '${l10n.imprintDisclaimerLabel}:',
                           style: const TextStyle(fontWeight: FontWeight.bold),
