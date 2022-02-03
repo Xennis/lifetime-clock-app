@@ -1,1 +1,1 @@
-# lifetime-app
+# lifetime-clock-app
