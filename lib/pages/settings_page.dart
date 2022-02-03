@@ -46,8 +46,8 @@ class _SettingsPageState extends State<SettingsPage> {
                   onTap: () => _selectBirthday(context),
                 ),
                 ListTile(
-                  leading: const Icon(Icons.health_and_safety),
-                  title: Text(l10n.age),
+                  leading: const Icon(Icons.person_add_alt_1_sharp),
+                  title: Text(l10n.optionPlannedAge),
                   subtitle: Text("${widget.config.age}"),
                   onTap: () => _selectAge(context),
                 ),
@@ -108,7 +108,7 @@ class _SettingsPageState extends State<SettingsPage> {
     final int? picked = await showDialog<int>(
         context: context,
         builder: (context) => AlertDialog(
-              title: Text(l10n.age),
+              title: Text(l10n.optionPlannedAge),
               content: StatefulBuilder(
                 builder: (context, dialogState) {
                   return NumberPicker(

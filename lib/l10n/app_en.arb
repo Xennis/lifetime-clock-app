@@ -61,13 +61,17 @@
     "type": "text",
     "placeholders": {}
   },
+  "optionPlannedAge": "Planned age",
+  "@optionPlannedAge": {
+    "description": "Age at death"
+  },
   "optionDarkTheme": "Dark theme",
   "@optionDarkTheme": {
-    "description": "Option to enable the dark theme"
+    "description": "Option to enforce the dark theme"
   },
   "optionDarkThemeDesc": "Enforce dark brightness",
   "@optionDarkThemeDesc": {
-    "description": "Option to enable the dark theme"
+    "description": "Description for the option to enforce the dark theme"
   },
   "numberViewBirthToNow": "{birthday} ~ now",
   "@numberViewBirthToNow": {
