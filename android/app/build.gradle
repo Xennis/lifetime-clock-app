@@ -67,6 +67,11 @@ android {
     buildTypes {
         release {
             signingConfig signingConfigs.release
+            // Does not work:
+            //ndk {
+            //    // Add debug symbols to avoid warnings in PlayStore releases.
+            //    debugSymbolLevel 'FULL'
+            //}
         }
     }
 }
