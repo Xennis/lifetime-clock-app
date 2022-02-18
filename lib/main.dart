@@ -38,12 +38,6 @@ class LifetimeApp extends StatelessWidget {
                   if (config != null) {
                     return HomePage(config);
                   }
-                  if (config == null || snapshot.hasError) {
-                    final DateTime now = DateTime.now();
-                    // Use current date (and not current date time)
-                    return HomePage(LifetimeConfig(
-                        DateTime(now.year, now.month, now.day), 100));
-                  }
                   return const Center(child: CircularProgressIndicator());
                 }),
             localizationsDelegates: const [

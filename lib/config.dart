@@ -23,13 +23,11 @@ class AppPrefs {
   static const String _keyThemeMode = 'themeMode';
   static const String _keyNumberViewMode = 'numberViewMode';
 
-  static Future<LifetimeConfig?> get() async {
+  static Future<LifetimeConfig> get() async {
     final DateTime? birthdate = await _getBirthdate();
     final int? age = await _getAge();
-    if (birthdate != null && age != null) {
-      return LifetimeConfig(birthdate, age);
-    }
-    return Future.value(null);
+    // Use defaults if none are stored.
+    return LifetimeConfig(birthdate ?? DateTime(2000, 1, 1), age ?? 100);
   }
 
   static Future<DateTime?> _getBirthdate() async {
