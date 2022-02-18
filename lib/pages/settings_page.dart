@@ -155,6 +155,7 @@ class _SettingsPageState extends State<SettingsPage> {
         context: context,
         builder: (context) => AlertDialog(
               title: Text(l10n.imprint),
+              scrollable: true,
               content: Column(
                 // otherwise the dialog fills the whole hight
                 mainAxisSize: MainAxisSize.min,
@@ -168,7 +169,7 @@ class _SettingsPageState extends State<SettingsPage> {
                         ),
                         const TextSpan(
                             text:
-                                'Fabian Rosenthal\nSchäferkampsallee 61\n20357\nHamburg\ncode [at] xennis.org\n\n'),
+                                'Fabian Rosenthal\nSchäferkampsallee 61\n20357\nHamburg\nGermany\ncode [at] xennis.org\n\n'),
                         TextSpan(
                           text: '${l10n.imprintDisclaimerLabel}:',
                           style: const TextStyle(fontWeight: FontWeight.bold),
