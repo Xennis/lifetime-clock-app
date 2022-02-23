@@ -97,6 +97,18 @@
   "@boxViewInfoText": {
     "description": "Explains the user what is shown on the box view."
   },
+  "firstOpenDialogTitle": "Hello",
+  "@firstOpenDialogTitle": {
+    "description": "Title of the dialog shown to a user opening the app for the first time."
+  },
+  "firstOpenDialogContent": "Before using the app configure it.",
+  "@firstOpenDialogContent": {
+    "description": "Text of the dialog shown to a user opening the app for the first time."
+  },
+  "firstOpenDialogOpenSettings": "Open Settings",
+  "@firstOpenDialogOpenSettings": {
+    "description": "Button to open the settings."
+  },
   "birthday": "Birthday",
   "age": "Age",
   "ok": "ok",
