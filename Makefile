@@ -24,8 +24,8 @@ test:
 release-android:
 	@echo ">>> [Android] Flutter build release"
 	flutter build appbundle
-	#@echo ">>> [Android] Fastlane upload to Play Store"
-	#cd android && bundle exec fastlane alpha
+	@echo ">>> [Android] Fastlane upload to Play Store"
+	cd android && bundle exec fastlane alpha
 
 release-web:
 	@echo ">>> [Web] Flutter build release"

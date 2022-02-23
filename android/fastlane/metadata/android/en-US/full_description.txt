@@ -1,0 +1,5 @@
+A clock to visualize your life to encourage making the best out of it.
+
+The app shows you a counter and a graphical box view for your life. You can for example see for how many days you are already alive or how many years are ahead.
+
+Having your lifetime as an app might help you to really make use of your time! Question yourself how you want to spend this time. In the end, it comes down to a matter of priority between all kinds of activities.
