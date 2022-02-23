@@ -19,7 +19,7 @@ lint:
 
 test:
 	@echo ">>> Flutter test"
-	flutter test $(LIB_DIR) $(TEST_DIR)
+	flutter test $(TEST_DIR)
 
 release-android:
 	@echo ">>> [Android] Flutter build release"
