@@ -42,6 +42,10 @@ class _HomePageState extends State<HomePage> {
     final AppLocalizations l10n = AppLocalizations.of(context)!;
     final int current = yearsBetween(widget.config.birthdate, _now);
 
+    if (widget.config.defaults) {
+      Future.delayed(Duration.zero, () => _firstOpenDialog(context, l10n));
+    }
+
     return DefaultTabController(
       initialIndex: 0,
       length: 2,
@@ -123,6 +127,27 @@ class _HomePageState extends State<HomePage> {
       ),
     ];
     */
+  }
+
+  void _firstOpenDialog(BuildContext context, AppLocalizations l10n) async {
+    await showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+              title: Text(l10n.firstOpenDialogTitle),
+              content: Text(l10n.firstOpenDialogContent),
+              actions: [
+                TextButton(
+                  child: Text(l10n.firstOpenDialogOpenSettings.toUpperCase()),
+                  onPressed: () {
+                    widget.config.defaults = false;
+                    Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => SettingsPage(widget.config)));
+                  },
+                )
+              ],
+            ));
   }
 }
 

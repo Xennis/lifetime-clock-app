@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class LifetimeConfig {
-  LifetimeConfig(this.birthdate, this.age);
+  LifetimeConfig(this.birthdate, this.age, {this.defaults = false});
 
   DateTime birthdate;
   int age;
+
+  bool defaults;
 
   DateTime getDeathDay() {
     return DateTime(birthdate.year + age, birthdate.month, birthdate.day);
@@ -27,7 +29,9 @@ class AppPrefs {
     final DateTime? birthdate = await _getBirthdate();
     final int? age = await _getAge();
     // Use defaults if none are stored.
-    return LifetimeConfig(birthdate ?? DateTime(2000, 1, 1), age ?? 100);
+    final defaults = birthdate == null || age == null;
+    return LifetimeConfig(birthdate ?? DateTime(2000, 1, 1), age ?? 100,
+        defaults: defaults);
   }
 
   static Future<DateTime?> _getBirthdate() async {
