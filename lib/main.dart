@@ -4,7 +4,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 
 import 'pages/home_page.dart';
-import 'provider/theme_provider.dart';
+import 'provider/prefs_provider.dart';
 
 void main() {
   runApp(const LifetimeApp());
@@ -15,8 +15,8 @@ class LifetimeApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider<ThemeModeProvider>(
-        create: (_) => ThemeModeProvider(),
+    return ChangeNotifierProvider<AppPrefsProvider>(
+        create: (_) => AppPrefsProvider(),
         child: Builder(builder: (context) {
           return MaterialApp(
             onGenerateTitle: (context) =>
@@ -29,7 +29,7 @@ class LifetimeApp extends StatelessWidget {
               brightness: Brightness.dark,
               primarySwatch: Colors.orange,
             ),
-            themeMode: Provider.of<ThemeModeProvider>(context).getMode,
+            themeMode: Provider.of<AppPrefsProvider>(context).getThemeMode,
             home: const HomePage(),
             localizationsDelegates: const [
               AppLocalizations.delegate,
