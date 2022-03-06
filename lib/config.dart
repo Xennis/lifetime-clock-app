@@ -8,10 +8,6 @@ class LifetimeConfig {
   int age;
 
   bool defaults;
-
-  DateTime getDeathDay() {
-    return DateTime(birthdate.year + age, birthdate.month, birthdate.day);
-  }
 }
 
 enum NumberViewMode {

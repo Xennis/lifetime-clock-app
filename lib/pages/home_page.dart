@@ -6,45 +6,16 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../config.dart';
 import 'settings_page.dart';
 
-class HomePage extends StatefulWidget {
-  const HomePage(this.config, {Key? key}) : super(key: key);
-
-  final LifetimeConfig config;
-
-  @override
-  State<HomePage> createState() => _HomePageState();
-}
-
-class _HomePageState extends State<HomePage> {
-  late final Timer _timer;
-
-  late DateTime _now;
-
-  @override
-  void initState() {
-    _timer = Timer.periodic(const Duration(seconds: 1), (result) {
-      setState(() {
-        _now = DateTime.now();
-      });
-    });
-    _now = DateTime.now();
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    _timer.cancel();
-    super.dispose();
-  }
+class HomePage extends StatelessWidget {
+  const HomePage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final AppLocalizations l10n = AppLocalizations.of(context)!;
-    final int current = yearsBetween(widget.config.birthdate, _now);
 
-    if (widget.config.defaults) {
-      Future.delayed(Duration.zero, () => _firstOpenDialog(context, l10n));
-    }
+    //if (widget.config.defaults) {
+    //  Future.delayed(Duration.zero, () => _firstOpenDialog(context, l10n));
+    //}
 
     return DefaultTabController(
       initialIndex: 0,
@@ -52,7 +23,7 @@ class _HomePageState extends State<HomePage> {
       child: Scaffold(
         appBar: AppBar(
           title: Text(l10n.appTitle),
-          actions: _appBarActions(l10n),
+          actions: _appBarActions(context, l10n),
           bottom: const TabBar(
             tabs: [
               Tab(icon: Icon(Icons.article)),
@@ -65,17 +36,17 @@ class _HomePageState extends State<HomePage> {
             SingleChildScrollView(
               child: Padding(
                 padding: const EdgeInsets.fromLTRB(10, 15, 10, 20),
-                child: _NumberView(
-                  now: _now,
-                  birthday: widget.config.birthdate,
-                  deathDay: widget.config.getDeathDay(),
-                ),
+                child: _LoadTabBarView(
+                    loaded: (config) => _NumberView(
+                        birthday: config.birthdate, age: config.age)),
               ),
             ),
             SingleChildScrollView(
                 child: Padding(
               padding: const EdgeInsets.fromLTRB(10, 25, 10, 20),
-              child: _BoxView(widget.config.age, current),
+              child: _LoadTabBarView(
+                  loaded: (config) =>
+                      _BoxView(birthday: config.birthdate, age: config.age)),
             )),
           ],
         ),
@@ -83,7 +54,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  List<Widget> _appBarActions(AppLocalizations l10n) {
+  List<Widget> _appBarActions(BuildContext context, AppLocalizations l10n) {
     return [
       Padding(
         padding: const EdgeInsets.only(right: 3.0),
@@ -93,10 +64,8 @@ class _HomePageState extends State<HomePage> {
           ),
           tooltip: l10n.settingsPage,
           onPressed: () {
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => SettingsPage(widget.config)));
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => const SettingsPage()));
           },
         ),
       )
@@ -129,6 +98,7 @@ class _HomePageState extends State<HomePage> {
     */
   }
 
+  /*
   void _firstOpenDialog(BuildContext context, AppLocalizations l10n) async {
     await showDialog(
         context: context,
@@ -143,44 +113,83 @@ class _HomePageState extends State<HomePage> {
                     Navigator.pushReplacement(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => SettingsPage(widget.config)));
+                            builder: (context) => const SettingsPage()));
                   },
                 )
               ],
             ));
   }
+  */
+}
+
+class _LoadTabBarView extends StatelessWidget {
+  const _LoadTabBarView({required this.loaded, Key? key}) : super(key: key);
+
+  final Function(LifetimeConfig config) loaded;
+
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder<LifetimeConfig>(
+      future: AppPrefs.get(),
+      builder: (context, snapshot) {
+        final LifetimeConfig? config = snapshot.data;
+        if (config == null) {
+          return const Center(child: CircularProgressIndicator());
+        }
+        return loaded(config);
+      },
+    );
+  }
 }
 
 class _NumberView extends StatefulWidget {
-  const _NumberView(
-      {required this.now,
-      required this.birthday,
-      required this.deathDay,
-      Key? key})
+  const _NumberView({required this.birthday, required this.age, Key? key})
       : super(key: key);
 
-  final DateTime now;
   final DateTime birthday;
-  final DateTime deathDay;
+  final int age;
 
   @override
   State<_NumberView> createState() => _NumberViewState();
 }
 
 class _NumberViewState extends State<_NumberView> {
+  late final Timer _timer;
+  late DateTime _now;
+
   NumberViewMode _mode = NumberViewMode.birthToNow;
+
+  @override
+  void initState() {
+    super.initState();
+    _timer = Timer.periodic(const Duration(seconds: 1), (result) {
+      setState(() {
+        _now = DateTime.now();
+      });
+    });
+    _now = DateTime.now();
+  }
+
+  @override
+  void dispose() {
+    _timer.cancel();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     final AppLocalizations l10n = AppLocalizations.of(context)!;
+    final DateTime deathDay = DateTime(widget.birthday.year + widget.age,
+        widget.birthday.month, widget.birthday.day);
+
     int years;
     Duration duration;
     if (_mode == NumberViewMode.nowToDeath) {
-      years = yearsBetween(widget.now, widget.deathDay);
-      duration = widget.deathDay.difference(widget.now);
+      years = yearsBetween(_now, deathDay);
+      duration = deathDay.difference(_now);
     } else {
-      years = yearsBetween(widget.birthday, widget.now);
-      duration = widget.now.difference(widget.birthday);
+      years = yearsBetween(widget.birthday, _now);
+      duration = _now.difference(widget.birthday);
     }
     if (years < 0) {
       years = 0;
@@ -193,7 +202,7 @@ class _NumberViewState extends State<_NumberView> {
       NumberViewMode.birthToNow:
           l10n.numberViewBirthToNow(widget.birthday.toString().split(' ')[0]),
       NumberViewMode.nowToDeath:
-          l10n.numberViewNowToDeath(widget.deathDay.toString().split(' ')[0])
+          l10n.numberViewNowToDeath(deathDay.toString().split(' ')[0])
     };
 
     return Column(
@@ -262,11 +271,20 @@ class _NumberDefaultView extends StatelessWidget {
   }
 }
 
-class _BoxView extends StatelessWidget {
-  const _BoxView(this.max, this.current, {Key? key}) : super(key: key);
+class _BoxView extends StatefulWidget {
+  const _BoxView({required this.birthday, required this.age, Key? key})
+      : super(key: key);
 
-  final int max;
-  final int current;
+  final DateTime birthday;
+  final int age;
+
+  @override
+  State<_BoxView> createState() => _BoxViewState();
+}
+
+class _BoxViewState extends State<_BoxView> {
+  late final Timer _timer;
+  late DateTime _now;
 
   static const CustomPaint _past = CustomPaint(
     size: Size(25, 25),
@@ -282,11 +300,33 @@ class _BoxView extends StatelessWidget {
   );
 
   @override
+  void initState() {
+    super.initState();
+    _timer = Timer.periodic(const Duration(seconds: 2), (result) {
+      final DateTime now = DateTime.now();
+      // Only if the year changes a reload is required.
+      if (now.year != _now.year) {
+        setState(() {
+          _now = now;
+        });
+      }
+    });
+    _now = DateTime.now();
+  }
+
+  @override
+  void dispose() {
+    _timer.cancel();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final AppLocalizations l10n = AppLocalizations.of(context)!;
+    final int current = yearsBetween(widget.birthday, _now);
     final List<Widget> boxes = [];
-    for (var i = 0; i < max; i++) {
-      boxes.add(_box(i));
+    for (var i = 0; i < widget.age; i++) {
+      boxes.add(_box(i, current: current));
     }
 
     return Center(
@@ -317,7 +357,7 @@ class _BoxView extends StatelessWidget {
     );
   }
 
-  CustomPaint _box(int i) {
+  static CustomPaint _box(int i, {required int current}) {
     if (i < current) {
       return _past;
     }
