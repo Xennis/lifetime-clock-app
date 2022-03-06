@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
+import '../provider/prefs_provider.dart';
 import '../config.dart';
 
 class LoadConfig extends StatelessWidget {
@@ -10,7 +12,7 @@ class LoadConfig extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<LifetimeConfig>(
-      future: AppPrefs.get(),
+      future: Provider.of<AppPrefsProvider>(context).get,
       builder: (context, snapshot) {
         final LifetimeConfig? config = snapshot.data;
         if (config == null) {

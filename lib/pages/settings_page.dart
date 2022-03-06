@@ -4,8 +4,7 @@ import 'package:numberpicker/numberpicker.dart';
 import 'package:provider/provider.dart';
 
 import '../widget/load_config.dart';
-import '../provider/theme_provider.dart';
-import '../config.dart';
+import '../provider/prefs_provider.dart';
 
 class SettingsPage extends StatelessWidget {
   const SettingsPage({Key? key}) : super(key: key);
@@ -13,8 +12,8 @@ class SettingsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final AppLocalizations l10n = AppLocalizations.of(context)!;
-    final ThemeModeProvider themeModeProvider =
-        Provider.of<ThemeModeProvider>(context);
+    final AppPrefsProvider prefsProvider =
+        Provider.of<AppPrefsProvider>(context);
 
     return Scaffold(
         appBar: AppBar(
@@ -34,11 +33,11 @@ class SettingsPage extends StatelessWidget {
                       title: Text(l10n.optionDarkTheme),
                       subtitle: Text(l10n.optionDarkThemeDesc),
                       trailing: Switch(
-                          value: themeModeProvider.getMode == ThemeMode.dark,
+                          value: prefsProvider.getThemeMode == ThemeMode.dark,
                           onChanged: (value) {
                             final ThemeMode themeMode =
                                 value ? ThemeMode.dark : ThemeMode.light;
-                            themeModeProvider.setMode(themeMode);
+                            prefsProvider.setThemeMode(themeMode);
                           }),
                       onTap: () => {},
                     ),
@@ -142,22 +141,25 @@ class _BirthdayListTileState extends State<_BirthdayListTile> {
   @override
   Widget build(BuildContext context) {
     final AppLocalizations l10n = AppLocalizations.of(context)!;
+    final AppPrefsProvider prefsProvider =
+        Provider.of<AppPrefsProvider>(context);
     return ListTile(
       leading: const Icon(Icons.date_range),
       title: Text(l10n.birthday),
       subtitle: Text("$_birthday".split(' ')[0]),
-      onTap: () => _selectBirthday(context),
+      onTap: () => _selectBirthday(context, prefsProvider),
     );
   }
 
-  Future<void> _selectBirthday(BuildContext context) async {
+  Future<void> _selectBirthday(
+      BuildContext context, AppPrefsProvider prefsProvider) async {
     final DateTime? picked = await showDatePicker(
         context: context,
         initialDate: _birthday,
         firstDate: DateTime(1900),
         lastDate: DateTime.now());
     if (picked != null && picked != _birthday) {
-      AppPrefs.setBirthdate(picked);
+      prefsProvider.setBirthday(picked);
       setState(() {
         _birthday = picked;
       });
@@ -186,16 +188,18 @@ class _AgeListTileState extends State<_AgeListTile> {
   @override
   Widget build(BuildContext context) {
     final AppLocalizations l10n = AppLocalizations.of(context)!;
+    final AppPrefsProvider prefsProvider =
+        Provider.of<AppPrefsProvider>(context);
     return ListTile(
       leading: const Icon(Icons.person_add_alt_1_sharp),
       title: Text(l10n.optionPlannedAge),
       subtitle: Text("$_age"),
-      onTap: () => _selectAge(context),
+      onTap: () => _selectAge(context, l10n, prefsProvider),
     );
   }
 
-  void _selectAge(BuildContext context) async {
-    final AppLocalizations l10n = AppLocalizations.of(context)!;
+  void _selectAge(BuildContext context, AppLocalizations l10n,
+      AppPrefsProvider prefsProvider) async {
     final int? picked = await showDialog<int>(
         context: context,
         builder: (context) => AlertDialog(
@@ -229,7 +233,7 @@ class _AgeListTileState extends State<_AgeListTile> {
             ));
 
     if (picked != null) {
-      AppPrefs.setAge(picked);
+      prefsProvider.setAge(picked);
       setState(() {
         _age = picked;
       });

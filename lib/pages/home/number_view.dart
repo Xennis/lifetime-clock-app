@@ -2,7 +2,9 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:provider/provider.dart';
 
+import '../../provider/prefs_provider.dart';
 import '../../config.dart';
 import '../../util.dart';
 
@@ -43,6 +45,8 @@ class _NumberViewState extends State<NumberView> {
   @override
   Widget build(BuildContext context) {
     final AppLocalizations l10n = AppLocalizations.of(context)!;
+    final AppPrefsProvider prefsProvider =
+        Provider.of<AppPrefsProvider>(context);
     final DateTime deathDay = DateTime(widget.birthday.year + widget.age,
         widget.birthday.month, widget.birthday.day);
 
@@ -75,8 +79,8 @@ class _NumberViewState extends State<NumberView> {
         DropdownButton<NumberViewMode>(
             value: _mode,
             onChanged: (NumberViewMode? newMode) {
-              if (newMode != null) {
-                AppPrefs.setNumberViewMode(newMode);
+              if (newMode != null && newMode != _mode) {
+                prefsProvider.setNumberViewMode(newMode);
                 setState(() {
                   _mode = newMode;
                 });
