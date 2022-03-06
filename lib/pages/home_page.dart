@@ -1,9 +1,9 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-import '../config.dart';
+import '../widget/load_config.dart';
+import 'home/box_view.dart';
+import 'home/number_view.dart';
 import 'settings_page.dart';
 
 class HomePage extends StatelessWidget {
@@ -36,17 +36,17 @@ class HomePage extends StatelessWidget {
             SingleChildScrollView(
               child: Padding(
                 padding: const EdgeInsets.fromLTRB(10, 15, 10, 20),
-                child: _LoadTabBarView(
-                    loaded: (config) => _NumberView(
+                child: LoadConfig(
+                    loaded: (config) => NumberView(
                         birthday: config.birthdate, age: config.age)),
               ),
             ),
             SingleChildScrollView(
                 child: Padding(
               padding: const EdgeInsets.fromLTRB(10, 25, 10, 20),
-              child: _LoadTabBarView(
+              child: LoadConfig(
                   loaded: (config) =>
-                      _BoxView(birthday: config.birthdate, age: config.age)),
+                      BoxView(birthday: config.birthdate, age: config.age)),
             )),
           ],
         ),
@@ -120,276 +120,4 @@ class HomePage extends StatelessWidget {
             ));
   }
   */
-}
-
-class _LoadTabBarView extends StatelessWidget {
-  const _LoadTabBarView({required this.loaded, Key? key}) : super(key: key);
-
-  final Function(LifetimeConfig config) loaded;
-
-  @override
-  Widget build(BuildContext context) {
-    return FutureBuilder<LifetimeConfig>(
-      future: AppPrefs.get(),
-      builder: (context, snapshot) {
-        final LifetimeConfig? config = snapshot.data;
-        if (config == null) {
-          return const Center(child: CircularProgressIndicator());
-        }
-        return loaded(config);
-      },
-    );
-  }
-}
-
-class _NumberView extends StatefulWidget {
-  const _NumberView({required this.birthday, required this.age, Key? key})
-      : super(key: key);
-
-  final DateTime birthday;
-  final int age;
-
-  @override
-  State<_NumberView> createState() => _NumberViewState();
-}
-
-class _NumberViewState extends State<_NumberView> {
-  late final Timer _timer;
-  late DateTime _now;
-
-  NumberViewMode _mode = NumberViewMode.birthToNow;
-
-  @override
-  void initState() {
-    super.initState();
-    _timer = Timer.periodic(const Duration(seconds: 1), (result) {
-      setState(() {
-        _now = DateTime.now();
-      });
-    });
-    _now = DateTime.now();
-  }
-
-  @override
-  void dispose() {
-    _timer.cancel();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final AppLocalizations l10n = AppLocalizations.of(context)!;
-    final DateTime deathDay = DateTime(widget.birthday.year + widget.age,
-        widget.birthday.month, widget.birthday.day);
-
-    int years;
-    Duration duration;
-    if (_mode == NumberViewMode.nowToDeath) {
-      years = yearsBetween(_now, deathDay);
-      duration = deathDay.difference(_now);
-    } else {
-      years = yearsBetween(widget.birthday, _now);
-      duration = _now.difference(widget.birthday);
-    }
-    if (years < 0) {
-      years = 0;
-    }
-    if (duration.isNegative) {
-      duration = Duration.zero;
-    }
-
-    final Map<NumberViewMode, String> modes = {
-      NumberViewMode.birthToNow:
-          l10n.numberViewBirthToNow(widget.birthday.toString().split(' ')[0]),
-      NumberViewMode.nowToDeath:
-          l10n.numberViewNowToDeath(deathDay.toString().split(' ')[0])
-    };
-
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.start,
-      children: [
-        DropdownButton<NumberViewMode>(
-            value: _mode,
-            onChanged: (NumberViewMode? newMode) {
-              if (newMode != null) {
-                AppPrefs.setNumberViewMode(newMode);
-                setState(() {
-                  _mode = newMode;
-                });
-              }
-            },
-            items: modes.entries
-                .map((e) => DropdownMenuItem<NumberViewMode>(
-                      value: e.key,
-                      child: Text(e.value),
-                    ))
-                .toList()),
-        const Padding(padding: EdgeInsets.only(bottom: 15.0)),
-        _NumberDefaultView(years, duration),
-      ],
-    );
-  }
-}
-
-class _NumberDefaultView extends StatelessWidget {
-  const _NumberDefaultView(this.years, this.duration, {Key? key})
-      : super(key: key);
-
-  final int years;
-  final Duration duration;
-
-  final TextStyle _pairStyle = const TextStyle(fontSize: 28.0);
-
-  @override
-  Widget build(BuildContext context) {
-    final AppLocalizations l10n = AppLocalizations.of(context)!;
-    final Map<String, String> pairs = {
-      l10n.olympics: "${(years / 4).floor()}",
-      l10n.years: "$years",
-      l10n.days: "${duration.inDays}",
-      l10n.hours: "${duration.inHours}",
-      l10n.minutes: "${duration.inMinutes}",
-      l10n.seconds: "${duration.inSeconds}"
-    };
-
-    final List<TableRow> rows = [];
-    pairs.forEach((label, value) {
-      rows.add(TableRow(children: [
-        Padding(
-          padding: const EdgeInsets.only(right: 12),
-          child: Text(
-            label,
-            style: _pairStyle,
-            textAlign: TextAlign.end,
-          ),
-        ),
-        Text(value, style: _pairStyle),
-      ]));
-    });
-
-    return Table(children: rows);
-  }
-}
-
-class _BoxView extends StatefulWidget {
-  const _BoxView({required this.birthday, required this.age, Key? key})
-      : super(key: key);
-
-  final DateTime birthday;
-  final int age;
-
-  @override
-  State<_BoxView> createState() => _BoxViewState();
-}
-
-class _BoxViewState extends State<_BoxView> {
-  late final Timer _timer;
-  late DateTime _now;
-
-  static const CustomPaint _past = CustomPaint(
-    size: Size(25, 25),
-    painter: _ColoredRect(Colors.blueAccent),
-  );
-  static const CustomPaint _active = CustomPaint(
-    size: Size(25, 25),
-    painter: _ColoredRect(Colors.pinkAccent),
-  );
-  static const CustomPaint _future = CustomPaint(
-    size: Size(25, 25),
-    painter: _ColoredRect(Colors.greenAccent),
-  );
-
-  @override
-  void initState() {
-    super.initState();
-    _timer = Timer.periodic(const Duration(seconds: 2), (result) {
-      final DateTime now = DateTime.now();
-      // Only if the year changes a reload is required.
-      if (now.year != _now.year) {
-        setState(() {
-          _now = now;
-        });
-      }
-    });
-    _now = DateTime.now();
-  }
-
-  @override
-  void dispose() {
-    _timer.cancel();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final AppLocalizations l10n = AppLocalizations.of(context)!;
-    final int current = yearsBetween(widget.birthday, _now);
-    final List<Widget> boxes = [];
-    for (var i = 0; i < widget.age; i++) {
-      boxes.add(_box(i, current: current));
-    }
-
-    return Center(
-      child: Column(
-        children: [
-          Wrap(
-            spacing: 10.0,
-            runSpacing: 10.0,
-            children: boxes,
-          ),
-          const Padding(padding: EdgeInsets.only(bottom: 20.0)),
-          const Divider(),
-          Row(
-            children: [
-              Column(
-                children: const [
-                  Icon(
-                    Icons.info_outline,
-                  )
-                ],
-              ),
-              const Padding(padding: EdgeInsets.only(right: 10.0)),
-              Flexible(child: Text(l10n.boxViewInfoText))
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-
-  static CustomPaint _box(int i, {required int current}) {
-    if (i < current) {
-      return _past;
-    }
-    if (i == current) {
-      return _active;
-    }
-    return _future;
-  }
-}
-
-class _ColoredRect extends CustomPainter {
-  const _ColoredRect(this.color, {Listenable? repaint})
-      : super(repaint: repaint);
-
-  final Color color;
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    Paint paint = Paint()..color = color;
-    canvas.drawRect(const Offset(0, 0) & size, paint);
-  }
-
-  @override
-  bool shouldRepaint(covariant CustomPainter oldDelegate) => true;
-}
-
-int yearsBetween(DateTime from, DateTime to) {
-  int years = to.year - from.year;
-  final int months = to.month - from.month;
-  final int days = to.day - from.day;
-  if (months < 0 || (months == 0 && days < 0)) {
-    years--;
-  }
-  return years;
 }
