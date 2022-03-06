@@ -3,7 +3,6 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 
-import 'config.dart';
 import 'pages/home_page.dart';
 import 'provider/theme_provider.dart';
 
@@ -31,15 +30,7 @@ class LifetimeApp extends StatelessWidget {
               primarySwatch: Colors.orange,
             ),
             themeMode: Provider.of<ThemeModeProvider>(context).getMode,
-            home: FutureBuilder<LifetimeConfig?>(
-                future: AppPrefs.get(),
-                builder: (context, snapshot) {
-                  final LifetimeConfig? config = snapshot.data;
-                  if (config != null) {
-                    return HomePage(config);
-                  }
-                  return const Center(child: CircularProgressIndicator());
-                }),
+            home: const HomePage(),
             localizationsDelegates: const [
               AppLocalizations.delegate,
               GlobalMaterialLocalizations.delegate,

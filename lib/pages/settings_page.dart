@@ -6,23 +6,8 @@ import 'package:provider/provider.dart';
 import '../provider/theme_provider.dart';
 import '../config.dart';
 
-class SettingsPage extends StatefulWidget {
-  const SettingsPage(this.config, {Key? key}) : super(key: key);
-
-  final LifetimeConfig config;
-
-  @override
-  State<SettingsPage> createState() => _SettingsPageState();
-}
-
-class _SettingsPageState extends State<SettingsPage> {
-  late int _selectedAge;
-
-  @override
-  void initState() {
-    _selectedAge = widget.config.age;
-    super.initState();
-  }
+class SettingsPage extends StatelessWidget {
+  const SettingsPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -34,119 +19,58 @@ class _SettingsPageState extends State<SettingsPage> {
         appBar: AppBar(
           title: Text(l10n.settingsPage),
         ),
-        body: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.fromLTRB(10, 20, 10, 20),
-            child: Column(
-              children: [
-                ListTile(
-                  leading: const Icon(Icons.date_range),
-                  title: Text(l10n.birthday),
-                  subtitle: Text("${widget.config.birthdate}".split(' ')[0]),
-                  onTap: () => _selectBirthday(context),
-                ),
-                ListTile(
-                  leading: const Icon(Icons.person_add_alt_1_sharp),
-                  title: Text(l10n.optionPlannedAge),
-                  subtitle: Text("${widget.config.age}"),
-                  onTap: () => _selectAge(context),
-                ),
-                const Divider(),
-                ListTile(
-                  leading: const Icon(Icons.color_lens),
-                  title: Text(l10n.optionDarkTheme),
-                  subtitle: Text(l10n.optionDarkThemeDesc),
-                  trailing: Switch(
-                      value: themeModeProvider.getMode == ThemeMode.dark,
-                      onChanged: (value) {
-                        final ThemeMode themeMode =
-                            value ? ThemeMode.dark : ThemeMode.light;
-                        themeModeProvider.setMode(themeMode);
-                      }),
-                  onTap: () => {},
-                ),
-                const Divider(),
-                AboutListTile(
-                  child: Text(l10n.aboutPage),
-                  icon: const Icon(Icons.explore),
-                  //applicationIcon: Image.asset(
-                  //  'assets/app-icon.png',
-                  //  width: 65,
-                  //  height: 65,
-                  //),
-                  applicationName: l10n.appTitle,
-                  applicationVersion: l10n.aboutVersion('1.1.0'),
-                  applicationLegalese: l10n.aboutLegalese('Xennis'),
-                ),
-                ListTile(
-                  leading: const Icon(Icons.info),
-                  title: Text(l10n.imprint),
-                  onTap: () => _showImprint(context),
-                ),
-              ],
-            ),
-          ),
-        ));
-  }
+        body: FutureBuilder<LifetimeConfig?>(
+          future: AppPrefs.get(),
+          builder: (context, snapshot) {
+            final LifetimeConfig? config = snapshot.data;
+            if (config == null) {
+              return const Center(child: CircularProgressIndicator());
+            }
 
-  Future<void> _selectBirthday(BuildContext context) async {
-    final DateTime? picked = await showDatePicker(
-        context: context,
-        initialDate: widget.config.birthdate,
-        firstDate: DateTime(1900),
-        lastDate: DateTime.now());
-    if (picked != null && picked != widget.config.birthdate) {
-      AppPrefs.setBirthdate(picked);
-      setState(() {
-        widget.config.birthdate = picked;
-      });
-    }
-  }
-
-  void _selectAge(BuildContext context) async {
-    final AppLocalizations l10n = AppLocalizations.of(context)!;
-    final int? picked = await showDialog<int>(
-        context: context,
-        builder: (context) => AlertDialog(
-              title: Text(l10n.optionPlannedAge),
-              content: StatefulBuilder(
-                builder: (context, dialogState) {
-                  return NumberPicker(
-                    value: _selectedAge,
-                    minValue: 1,
-                    maxValue: 150,
-                    onChanged: (int value) {
-                      dialogState(() => _selectedAge = value);
-                    },
-                  );
-                },
+            return SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(10, 20, 10, 20),
+                child: Column(
+                  children: [
+                    _BirthdayListTile(config.birthdate),
+                    _AgeListTile(config.age),
+                    ListTile(
+                      leading: const Icon(Icons.color_lens),
+                      title: Text(l10n.optionDarkTheme),
+                      subtitle: Text(l10n.optionDarkThemeDesc),
+                      trailing: Switch(
+                          value: themeModeProvider.getMode == ThemeMode.dark,
+                          onChanged: (value) {
+                            final ThemeMode themeMode =
+                                value ? ThemeMode.dark : ThemeMode.light;
+                            themeModeProvider.setMode(themeMode);
+                          }),
+                      onTap: () => {},
+                    ),
+                    const Divider(),
+                    AboutListTile(
+                      child: Text(l10n.aboutPage),
+                      icon: const Icon(Icons.explore),
+                      //applicationIcon: Image.asset(
+                      //  'assets/app-icon.png',
+                      //  width: 65,
+                      //  height: 65,
+                      //),
+                      applicationName: l10n.appTitle,
+                      applicationVersion: l10n.aboutVersion('1.1.0'),
+                      applicationLegalese: l10n.aboutLegalese('Xennis'),
+                    ),
+                    ListTile(
+                      leading: const Icon(Icons.info),
+                      title: Text(l10n.imprint),
+                      onTap: () => _showImprint(context),
+                    ),
+                  ],
+                ),
               ),
-              actions: [
-                TextButton(
-                  child: Text(l10n.cancel.toUpperCase()),
-                  onPressed: () {
-                    Navigator.of(context).pop(null);
-                  },
-                ),
-                TextButton(
-                  child: Text(l10n.ok.toUpperCase()),
-                  onPressed: () {
-                    Navigator.of(context).pop(_selectedAge);
-                  },
-                )
-              ],
-            ));
-
-    if (picked != null) {
-      AppPrefs.setAge(picked);
-      setState(() {
-        widget.config.age = picked;
-      });
-    } else {
-      setState(() {
-        _selectedAge = widget.config.age;
-      });
-    }
+            );
+          },
+        ));
   }
 
   void _showImprint(BuildContext context) {
@@ -199,5 +123,125 @@ class _SettingsPageState extends State<SettingsPage> {
                 )
               ],
             ));
+  }
+}
+
+class _BirthdayListTile extends StatefulWidget {
+  const _BirthdayListTile(this.birthday, {Key? key}) : super(key: key);
+
+  final DateTime birthday;
+
+  @override
+  State<_BirthdayListTile> createState() => _BirthdayListTileState();
+}
+
+class _BirthdayListTileState extends State<_BirthdayListTile> {
+  late DateTime _birthday;
+
+  @override
+  void initState() {
+    super.initState();
+    _birthday = widget.birthday;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final AppLocalizations l10n = AppLocalizations.of(context)!;
+    return ListTile(
+      leading: const Icon(Icons.date_range),
+      title: Text(l10n.birthday),
+      subtitle: Text("$_birthday".split(' ')[0]),
+      onTap: () => _selectBirthday(context),
+    );
+  }
+
+  Future<void> _selectBirthday(BuildContext context) async {
+    final DateTime? picked = await showDatePicker(
+        context: context,
+        initialDate: _birthday,
+        firstDate: DateTime(1900),
+        lastDate: DateTime.now());
+    if (picked != null && picked != _birthday) {
+      AppPrefs.setBirthdate(picked);
+      setState(() {
+        _birthday = picked;
+      });
+    }
+  }
+}
+
+class _AgeListTile extends StatefulWidget {
+  const _AgeListTile(this.age, {Key? key}) : super(key: key);
+
+  final int age;
+
+  @override
+  State<_AgeListTile> createState() => _AgeListTileState();
+}
+
+class _AgeListTileState extends State<_AgeListTile> {
+  late int _age;
+
+  @override
+  void initState() {
+    super.initState();
+    _age = widget.age;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final AppLocalizations l10n = AppLocalizations.of(context)!;
+    return ListTile(
+      leading: const Icon(Icons.person_add_alt_1_sharp),
+      title: Text(l10n.optionPlannedAge),
+      subtitle: Text("$_age"),
+      onTap: () => _selectAge(context),
+    );
+  }
+
+  void _selectAge(BuildContext context) async {
+    final AppLocalizations l10n = AppLocalizations.of(context)!;
+    final int? picked = await showDialog<int>(
+        context: context,
+        builder: (context) => AlertDialog(
+              title: Text(l10n.optionPlannedAge),
+              content: StatefulBuilder(
+                builder: (context, dialogState) {
+                  return NumberPicker(
+                    value: _age,
+                    minValue: 1,
+                    maxValue: 150,
+                    onChanged: (int value) {
+                      dialogState(() => _age = value);
+                    },
+                  );
+                },
+              ),
+              actions: [
+                TextButton(
+                  child: Text(l10n.cancel.toUpperCase()),
+                  onPressed: () {
+                    Navigator.of(context).pop(null);
+                  },
+                ),
+                TextButton(
+                  child: Text(l10n.ok.toUpperCase()),
+                  onPressed: () {
+                    Navigator.of(context).pop(_age);
+                  },
+                )
+              ],
+            ));
+
+    if (picked != null) {
+      AppPrefs.setAge(picked);
+      setState(() {
+        _age = picked;
+      });
+    } else {
+      setState(() {
+        _age = widget.age;
+      });
+    }
   }
 }
