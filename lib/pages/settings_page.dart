@@ -3,6 +3,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:numberpicker/numberpicker.dart';
 import 'package:provider/provider.dart';
 
+import '../widget/load_config.dart';
 import '../provider/theme_provider.dart';
 import '../config.dart';
 
@@ -19,14 +20,8 @@ class SettingsPage extends StatelessWidget {
         appBar: AppBar(
           title: Text(l10n.settingsPage),
         ),
-        body: FutureBuilder<LifetimeConfig?>(
-          future: AppPrefs.get(),
-          builder: (context, snapshot) {
-            final LifetimeConfig? config = snapshot.data;
-            if (config == null) {
-              return const Center(child: CircularProgressIndicator());
-            }
-
+        body: LoadConfig(
+          loaded: (config) {
             return SingleChildScrollView(
               child: Padding(
                 padding: const EdgeInsets.fromLTRB(10, 20, 10, 20),
