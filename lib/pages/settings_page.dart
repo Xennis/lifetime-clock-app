@@ -273,7 +273,8 @@ class _LoadConfig extends StatelessWidget {
         prefsProvider.setBirthday(birthday);
         const int age = 100;
         prefsProvider.setAge(age);
-        return loaded(LifetimeConfig(birthday, age));
+        return loaded(LifetimeConfig(birthday, age,
+            numberViewMode: NumberViewMode.birthToNow));
       },
     );
   }

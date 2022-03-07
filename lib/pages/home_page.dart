@@ -36,7 +36,10 @@ class HomePage extends StatelessWidget {
                 padding: const EdgeInsets.fromLTRB(10, 25, 10, 20),
                 child: _LoadConfig(
                     loaded: (config) => NumberView(
-                        birthday: config.birthdate, age: config.age)),
+                          birthday: config.birthdate,
+                          age: config.age,
+                          mode: config.numberViewMode,
+                        )),
               ),
             ),
             SingleChildScrollView(

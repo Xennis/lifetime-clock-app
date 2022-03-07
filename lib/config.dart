@@ -1,10 +1,9 @@
 class LifetimeConfig {
-  LifetimeConfig(this.birthdate, this.age, {this.defaults = false});
+  LifetimeConfig(this.birthdate, this.age, {required this.numberViewMode});
 
   DateTime birthdate;
   int age;
-
-  bool defaults;
+  NumberViewMode numberViewMode;
 }
 
 enum NumberViewMode {

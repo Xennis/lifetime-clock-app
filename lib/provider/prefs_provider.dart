@@ -37,8 +37,8 @@ class AppPrefsProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void setNumberViewMode(NumberViewMode mode) {
-    _AppPrefs.setNumberViewMode(mode);
+  void setNumberViewMode(NumberViewMode mode) async {
+    await _AppPrefs.setNumberViewMode(mode);
     // No notify
   }
 }
@@ -65,7 +65,15 @@ class _AppPrefs {
     if (birthday == null || age == null) {
       return Future.value(null);
     }
-    return LifetimeConfig(birthday, age);
+
+    // Mode (with default)
+    NumberViewMode numberViewMode = NumberViewMode.birthToNow;
+    final int? rawNumberViewMode = prefs.getInt(_keyNumberViewMode);
+    if (rawNumberViewMode != null) {
+      numberViewMode = NumberViewMode.values[rawNumberViewMode];
+    }
+
+    return LifetimeConfig(birthday, age, numberViewMode: numberViewMode);
   }
 
   static Future<bool> setBirthdate(DateTime birthdate) async {
@@ -91,17 +99,6 @@ class _AppPrefs {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     return prefs.setInt(_keyThemeMode, mode.index);
   }
-
-  /*
-  static Future<NumberViewMode?> getNumberViewMode() async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    final int? raw = prefs.getInt(_keyNumberViewMode);
-    if (raw == null) {
-      return Future.value(null);
-    }
-    return NumberViewMode.values[raw];
-  }
-  */
 
   static Future<bool> setNumberViewMode(NumberViewMode mode) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
