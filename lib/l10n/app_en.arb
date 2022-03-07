@@ -101,7 +101,7 @@
   "@firstOpenDialogTitle": {
     "description": "Title of the dialog shown to a user opening the app for the first time."
   },
-  "firstOpenDialogContent": "Before using the app configure it.",
+  "firstOpenDialogContent": "Before using the app set a birthday and age.",
   "@firstOpenDialogContent": {
     "description": "Text of the dialog shown to a user opening the app for the first time."
   },

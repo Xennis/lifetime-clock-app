@@ -23,17 +23,17 @@ class AppPrefsProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<LifetimeConfig> get get {
+  Future<LifetimeConfig?> get get {
     return _AppPrefs.get();
   }
 
-  void setBirthday(DateTime birthday) {
-    _AppPrefs.setBirthdate(birthday);
+  void setBirthday(DateTime birthday) async {
+    await _AppPrefs.setBirthdate(birthday);
     notifyListeners();
   }
 
-  void setAge(int age) {
-    _AppPrefs.setAge(age);
+  void setAge(int age) async {
+    await _AppPrefs.setAge(age);
     notifyListeners();
   }
 
@@ -49,32 +49,28 @@ class _AppPrefs {
   static const String _keyThemeMode = 'themeMode';
   static const String _keyNumberViewMode = 'numberViewMode';
 
-  static Future<LifetimeConfig> get() async {
-    final DateTime? birthdate = await _getBirthdate();
-    final int? age = await _getAge();
-    // Use defaults if none are stored.
-    final defaults = birthdate == null || age == null;
-    return LifetimeConfig(birthdate ?? DateTime(2000, 1, 1), age ?? 100,
-        defaults: defaults);
-  }
-
-  static Future<DateTime?> _getBirthdate() async {
+  static Future<LifetimeConfig?> get() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
-    final String? raw = prefs.getString(_keyBirthdate);
-    if (raw == null) {
+
+    // Birthday
+    DateTime? birthday;
+    final String? rawBirthday = prefs.getString(_keyBirthdate);
+    if (rawBirthday != null) {
+      birthday = DateTime.tryParse(rawBirthday);
+    }
+
+    // Age
+    final int? age = prefs.getInt(_keyAge);
+
+    if (birthday == null || age == null) {
       return Future.value(null);
     }
-    return DateTime.tryParse(raw);
+    return LifetimeConfig(birthday, age);
   }
 
   static Future<bool> setBirthdate(DateTime birthdate) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     return prefs.setString(_keyBirthdate, birthdate.toIso8601String());
-  }
-
-  static Future<int?> _getAge() async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    return prefs.getInt(_keyAge);
   }
 
   static Future<bool> setAge(int age) async {

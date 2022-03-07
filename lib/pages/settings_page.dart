@@ -3,7 +3,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:numberpicker/numberpicker.dart';
 import 'package:provider/provider.dart';
 
-import '../widget/load_config.dart';
+import '../config.dart';
 import '../provider/prefs_provider.dart';
 
 class SettingsPage extends StatelessWidget {
@@ -19,7 +19,8 @@ class SettingsPage extends StatelessWidget {
         appBar: AppBar(
           title: Text(l10n.settingsPage),
         ),
-        body: LoadConfig(
+        body: _LoadConfig(
+          prefsProvider,
           loaded: (config) {
             return SingleChildScrollView(
               child: Padding(
@@ -242,5 +243,38 @@ class _AgeListTileState extends State<_AgeListTile> {
         _age = widget.age;
       });
     }
+  }
+}
+
+class _LoadConfig extends StatelessWidget {
+  const _LoadConfig(this.prefsProvider, {required this.loaded, Key? key})
+      : super(key: key);
+
+  final AppPrefsProvider prefsProvider;
+
+  final Function(LifetimeConfig config) loaded;
+
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder<LifetimeConfig?>(
+      future: Provider.of<AppPrefsProvider>(context).get,
+      builder: (context, snapshot) {
+        final LifetimeConfig? config = snapshot.data;
+        if (snapshot.connectionState == ConnectionState.waiting ||
+            snapshot.connectionState == ConnectionState.active) {
+          return const Center(child: CircularProgressIndicator());
+        }
+        if (config != null) {
+          return loaded(config);
+        }
+
+        // Set defaults
+        final DateTime birthday = DateTime(2000, 1, 1);
+        prefsProvider.setBirthday(birthday);
+        const int age = 100;
+        prefsProvider.setAge(age);
+        return loaded(LifetimeConfig(birthday, age));
+      },
+    );
   }
 }

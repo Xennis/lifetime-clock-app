@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:provider/provider.dart';
 
-import '../widget/load_config.dart';
+import '../provider/prefs_provider.dart';
+import '../config.dart';
 import 'home/box_view.dart';
 import 'home/number_view.dart';
 import 'settings_page.dart';
@@ -12,10 +14,6 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final AppLocalizations l10n = AppLocalizations.of(context)!;
-
-    //if (widget.config.defaults) {
-    //  Future.delayed(Duration.zero, () => _firstOpenDialog(context, l10n));
-    //}
 
     return DefaultTabController(
       initialIndex: 0,
@@ -36,7 +34,7 @@ class HomePage extends StatelessWidget {
             SingleChildScrollView(
               child: Padding(
                 padding: const EdgeInsets.fromLTRB(10, 15, 10, 20),
-                child: LoadConfig(
+                child: _LoadConfig(
                     loaded: (config) => NumberView(
                         birthday: config.birthdate, age: config.age)),
               ),
@@ -44,7 +42,7 @@ class HomePage extends StatelessWidget {
             SingleChildScrollView(
                 child: Padding(
               padding: const EdgeInsets.fromLTRB(10, 25, 10, 20),
-              child: LoadConfig(
+              child: _LoadConfig(
                   loaded: (config) =>
                       BoxView(birthday: config.birthdate, age: config.age)),
             )),
@@ -97,11 +95,38 @@ class HomePage extends StatelessWidget {
     ];
     */
   }
+}
 
-  /*
+class _LoadConfig extends StatelessWidget {
+  const _LoadConfig({required this.loaded, Key? key}) : super(key: key);
+
+  final Function(LifetimeConfig config) loaded;
+
+  @override
+  Widget build(BuildContext context) {
+    final AppLocalizations l10n = AppLocalizations.of(context)!;
+    return FutureBuilder<LifetimeConfig?>(
+      future: Provider.of<AppPrefsProvider>(context).get,
+      builder: (context, snapshot) {
+        final LifetimeConfig? config = snapshot.data;
+        if (snapshot.connectionState == ConnectionState.waiting ||
+            snapshot.connectionState == ConnectionState.active) {
+          return const Center(child: CircularProgressIndicator());
+        }
+        if (config == null) {
+          Future.delayed(Duration.zero, () => _firstOpenDialog(context, l10n));
+          return Container();
+        }
+        return loaded(config);
+      },
+    );
+  }
+
   void _firstOpenDialog(BuildContext context, AppLocalizations l10n) async {
     await showDialog(
         context: context,
+        // Forbid closing it by touch/click somewhere else.
+        barrierDismissible: false,
         builder: (context) => AlertDialog(
               title: Text(l10n.firstOpenDialogTitle),
               content: Text(l10n.firstOpenDialogContent),
@@ -109,7 +134,6 @@ class HomePage extends StatelessWidget {
                 TextButton(
                   child: Text(l10n.firstOpenDialogOpenSettings.toUpperCase()),
                   onPressed: () {
-                    widget.config.defaults = false;
                     Navigator.pushReplacement(
                         context,
                         MaterialPageRoute(
@@ -119,5 +143,4 @@ class HomePage extends StatelessWidget {
               ],
             ));
   }
-  */
 }
