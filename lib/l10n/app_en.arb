@@ -10,8 +10,7 @@
   "aboutPage": "About the app",
   "@aboutPage": {
     "description": "Label for about page",
-    "type": "text",
-    "placeholders": {}
+    "type": "text"
   },
   "aboutVersion": "Version {version}",
   "@aboutVersion": {
@@ -19,6 +18,7 @@
     "type": "text",
     "placeholders": {
       "version": {
+        "type": "String",
         "example": "1.4.0"
       }
     }
@@ -29,6 +29,7 @@
     "type": "text",
     "placeholders": {
       "name": {
+        "type": "String",
         "example": "Xennis"
       }
     }
@@ -36,8 +37,7 @@
   "imprint": "Legal notice",
   "@imprint": {
     "description": "Legal notice. The required \"Impressum\" due to German law.",
-    "type": "text",
-    "placeholders": {}
+    "type": "text"
   },
   "imprintTmgText": "Information in accordance with § {paragraphNumber} TMG",
   "@imprintTmgText": {
@@ -45,6 +45,7 @@
     "type": "text",
     "placeholders": {
       "paragraphNumber": {
+        "type": "int",
         "example": "5"
       }
     }
@@ -52,14 +53,12 @@
   "imprintDisclaimerLabel": "Disclaimer",
   "@imprintDisclaimerLabel": {
     "description": "Disclaimer headline on the imprint page",
-    "type": "text",
-    "placeholders": {}
+    "type": "text"
   },
   "imprintDisclaimerText": "We decline any liability for the contents of external links, for which only the respective webmasters are responsible.",
   "@imprintDisclaimerText": {
     "description": "Disclaimer text on the imprint page",
-    "type": "text",
-    "placeholders": {}
+    "type": "text"
   },
   "optionPlannedAge": "Planned age",
   "@optionPlannedAge": {
@@ -73,23 +72,32 @@
   "@optionDarkThemeDesc": {
     "description": "Description for the option to enforce the dark theme"
   },
-  "numberViewBirthToNow": "Time from {birthday} to now",
+  "numberViewBirthToNow": "The time from your birthday {birthday} to now.",
   "@numberViewBirthToNow": {
     "description": "Label for selecting clock from birthday to the current date",
     "type": "text",
     "placeholders": {
       "birthday": {
-        "example": "2001-04-23"
+        "type": "DateTime",
+        "format": "yMd",
+        "example": "04/23/2001"
       }
     }
   },
-  "numberViewNowToDeath": "Time from now to {deathDay}",
+  "numberViewNowToDeath": "The time from now to your planned age of {age} ({deathDay}).",
   "@numberViewNowToDeath": {
     "description": "Label for selecting clock from current date to death",
     "type": "text",
     "placeholders": {
+      "age": {
+        "type": "int",
+        "format": "decimalPattern",
+        "example": "100"
+      },
       "deathDay": {
-        "example": "2001-04-23"
+        "type": "DateTime",
+        "format": "yMd",
+        "example": "04/23/2001"
       }
     }
   },

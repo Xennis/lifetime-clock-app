@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:intl/intl.dart';
 import 'package:numberpicker/numberpicker.dart';
 import 'package:provider/provider.dart';
 
@@ -84,7 +85,7 @@ class SettingsPage extends StatelessWidget {
                       style: Theme.of(context).textTheme.bodyText1,
                       children: <InlineSpan>[
                         TextSpan(
-                          text: '${l10n.imprintTmgText('5')}:\n\n',
+                          text: '${l10n.imprintTmgText(5)}:\n\n',
                         ),
                         const TextSpan(
                             text:
@@ -147,7 +148,7 @@ class _BirthdayListTileState extends State<_BirthdayListTile> {
     return ListTile(
       leading: const Icon(Icons.date_range),
       title: Text(l10n.birthday),
-      subtitle: Text("$_birthday".split(' ')[0]),
+      subtitle: Text(DateFormat.yMd().format(_birthday)),
       onTap: () => _selectBirthday(context, prefsProvider),
     );
   }
