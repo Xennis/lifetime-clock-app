@@ -66,34 +66,37 @@ class _NumberViewState extends State<NumberView> {
       duration = Duration.zero;
     }
 
-    final Map<NumberViewMode, String> modes = {
-      NumberViewMode.birthToNow:
-          l10n.numberViewBirthToNow(widget.birthday.toString().split(' ')[0]),
-      NumberViewMode.nowToDeath:
-          l10n.numberViewNowToDeath(deathDay.toString().split(' ')[0])
-    };
+    String text = "";
+    if (_mode == NumberViewMode.birthToNow) {
+      text =
+          l10n.numberViewBirthToNow(widget.birthday.toString().split(' ')[0]);
+    } else {
+      text = l10n.numberViewNowToDeath(deathDay.toString().split(' ')[0]);
+    }
 
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
-        DropdownButton<NumberViewMode>(
-            value: _mode,
-            onChanged: (NumberViewMode? newMode) {
-              if (newMode != null && newMode != _mode) {
-                prefsProvider.setNumberViewMode(newMode);
-                setState(() {
-                  _mode = newMode;
-                });
-              }
-            },
-            items: modes.entries
-                .map((e) => DropdownMenuItem<NumberViewMode>(
-                      value: e.key,
-                      child: Text(e.value),
-                    ))
-                .toList()),
-        const Padding(padding: EdgeInsets.only(bottom: 15.0)),
         _NumberDefaultView(years, duration),
+        const Padding(padding: EdgeInsets.only(bottom: 20.0)),
+        const Divider(),
+        Row(
+          children: [
+            Switch(
+                value: _mode == NumberViewMode.birthToNow,
+                onChanged: (value) {
+                  final NumberViewMode mode = value
+                      ? NumberViewMode.birthToNow
+                      : NumberViewMode.nowToDeath;
+                  if (mode != _mode) {
+                    setState(() {
+                      _mode = mode;
+                    });
+                  }
+                }),
+            Flexible(child: Text(text)),
+          ],
+        ),
       ],
     );
   }

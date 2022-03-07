@@ -73,7 +73,7 @@
   "@optionDarkThemeDesc": {
     "description": "Description for the option to enforce the dark theme"
   },
-  "numberViewBirthToNow": "{birthday} ~ now",
+  "numberViewBirthToNow": "Time from {birthday} to now",
   "@numberViewBirthToNow": {
     "description": "Label for selecting clock from birthday to the current date",
     "type": "text",
@@ -83,7 +83,7 @@
       }
     }
   },
-  "numberViewNowToDeath": "now ~ {deathDay}",
+  "numberViewNowToDeath": "Time from now to {deathDay}",
   "@numberViewNowToDeath": {
     "description": "Label for selecting clock from current date to death",
     "type": "text",
