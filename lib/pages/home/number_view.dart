@@ -9,11 +9,13 @@ import '../../config.dart';
 import '../../util.dart';
 
 class NumberView extends StatefulWidget {
-  const NumberView({required this.birthday, required this.age, Key? key})
+  const NumberView(
+      {required this.birthday, required this.age, required this.mode, Key? key})
       : super(key: key);
 
   final DateTime birthday;
   final int age;
+  final NumberViewMode mode;
 
   @override
   State<NumberView> createState() => _NumberViewState();
@@ -22,8 +24,7 @@ class NumberView extends StatefulWidget {
 class _NumberViewState extends State<NumberView> {
   late final Timer _timer;
   late DateTime _now;
-
-  NumberViewMode _mode = NumberViewMode.birthToNow;
+  late NumberViewMode _mode;
 
   @override
   void initState() {
@@ -34,6 +35,7 @@ class _NumberViewState extends State<NumberView> {
       });
     });
     _now = DateTime.now();
+    _mode = widget.mode;
   }
 
   @override
@@ -89,6 +91,7 @@ class _NumberViewState extends State<NumberView> {
                       ? NumberViewMode.birthToNow
                       : NumberViewMode.nowToDeath;
                   if (mode != _mode) {
+                    prefsProvider.setNumberViewMode(mode);
                     setState(() {
                       _mode = mode;
                     });
