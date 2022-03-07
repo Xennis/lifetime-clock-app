@@ -1,0 +1,1 @@
+Show hint about settings on first opening
