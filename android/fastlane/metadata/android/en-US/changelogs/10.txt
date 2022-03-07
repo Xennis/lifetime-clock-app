@@ -1,0 +1,2 @@
+* Save number view mode
+* Improve number view switch
