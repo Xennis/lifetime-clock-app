@@ -70,10 +70,9 @@ class _NumberViewState extends State<NumberView> {
 
     String text = "";
     if (_mode == NumberViewMode.birthToNow) {
-      text =
-          l10n.numberViewBirthToNow(widget.birthday.toString().split(' ')[0]);
+      text = l10n.numberViewBirthToNow(widget.birthday);
     } else {
-      text = l10n.numberViewNowToDeath(deathDay.toString().split(' ')[0]);
+      text = l10n.numberViewNowToDeath(widget.age, deathDay);
     }
 
     return Column(
