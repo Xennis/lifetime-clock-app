@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 import '../../provider/prefs_provider.dart';
@@ -83,6 +84,19 @@ class _NumberViewState extends State<NumberView> {
         const Divider(),
         Row(
           children: [
+            Column(
+              children: const [
+                Icon(
+                  Icons.info_outline,
+                )
+              ],
+            ),
+            const Padding(padding: EdgeInsets.only(right: 10.0)),
+            Flexible(child: Text(text)),
+          ],
+        ),
+        Row(
+          children: [
             Switch(
                 value: _mode == NumberViewMode.birthToNow,
                 onChanged: (value) {
@@ -96,9 +110,9 @@ class _NumberViewState extends State<NumberView> {
                     });
                   }
                 }),
-            Flexible(child: Text(text)),
+            Text(l10n.numberViewModeSwitch),
           ],
-        ),
+        )
       ],
     );
   }
@@ -111,18 +125,19 @@ class _NumberDefaultView extends StatelessWidget {
   final int years;
   final Duration duration;
 
-  final TextStyle _pairStyle = const TextStyle(fontSize: 28.0);
+  final TextStyle _pairStyle = const TextStyle(fontSize: 27.0);
 
   @override
   Widget build(BuildContext context) {
     final AppLocalizations l10n = AppLocalizations.of(context)!;
+    final NumberFormat numberFmt = NumberFormat.decimalPattern();
     final Map<String, String> pairs = {
-      l10n.olympics: "${(years / 4).floor()}",
-      l10n.years: "$years",
-      l10n.days: "${duration.inDays}",
-      l10n.hours: "${duration.inHours}",
-      l10n.minutes: "${duration.inMinutes}",
-      l10n.seconds: "${duration.inSeconds}"
+      l10n.olympics: numberFmt.format((years / 4).floor()),
+      l10n.years: numberFmt.format(years),
+      l10n.days: numberFmt.format(duration.inDays),
+      l10n.hours: numberFmt.format(duration.inHours),
+      l10n.minutes: numberFmt.format(duration.inMinutes),
+      l10n.seconds: numberFmt.format(duration.inSeconds)
     };
 
     final List<TableRow> rows = [];

@@ -72,7 +72,7 @@
   "@optionDarkThemeDesc": {
     "description": "Description for the option to enforce the dark theme"
   },
-  "numberViewBirthToNow": "The time from your birthday {birthday} to now.",
+  "numberViewBirthToNow": "The clock shows the time from your birthday {birthday} to now.",
   "@numberViewBirthToNow": {
     "description": "Label for selecting clock from birthday to the current date",
     "type": "text",
@@ -84,7 +84,7 @@
       }
     }
   },
-  "numberViewNowToDeath": "The time from now to your planned age of {age} ({deathDay}).",
+  "numberViewNowToDeath": "The clock shows the time from now to your planned age of {age} ({deathDay}).",
   "@numberViewNowToDeath": {
     "description": "Label for selecting clock from current date to death",
     "type": "text",
@@ -100,6 +100,10 @@
         "example": "04/23/2001"
       }
     }
+  },
+  "numberViewModeSwitch": "Count up",
+  "@numberViewModeSwitch": {
+    "description": "Label for switch between count up/down the lifetime."
   },
   "boxViewInfoText": "Every box represents 1 year. Blue for the past, green the future and red the current one.",
   "@boxViewInfoText": {
