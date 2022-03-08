@@ -130,7 +130,7 @@ class _NumberDefaultView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final AppLocalizations l10n = AppLocalizations.of(context)!;
-    final NumberFormat numberFmt = NumberFormat.decimalPattern();
+    final NumberFormat numberFmt = NumberFormat.decimalPattern(l10n.localeName);
     final Map<String, String> pairs = {
       l10n.olympics: numberFmt.format((years / 4).floor()),
       l10n.years: numberFmt.format(years),

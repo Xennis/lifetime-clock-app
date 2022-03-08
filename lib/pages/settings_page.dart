@@ -148,7 +148,7 @@ class _BirthdayListTileState extends State<_BirthdayListTile> {
     return ListTile(
       leading: const Icon(Icons.date_range),
       title: Text(l10n.birthday),
-      subtitle: Text(DateFormat.yMd().format(_birthday)),
+      subtitle: Text(DateFormat.yMd(l10n.localeName).format(_birthday)),
       onTap: () => _selectBirthday(context, prefsProvider),
     );
   }
