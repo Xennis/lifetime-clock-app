@@ -31,19 +31,7 @@ class SettingsPage extends StatelessWidget {
                     _BirthdayListTile(config.birthdate),
                     _AgeListTile(config.age),
                     const Divider(),
-                    ListTile(
-                      leading: const Icon(Icons.color_lens),
-                      title: Text(l10n.optionDarkTheme),
-                      subtitle: Text(l10n.optionDarkThemeDesc),
-                      trailing: Switch(
-                          value: prefsProvider.themeMode == ThemeMode.dark,
-                          onChanged: (value) {
-                            final ThemeMode themeMode =
-                                value ? ThemeMode.dark : ThemeMode.light;
-                            prefsProvider.setThemeMode(themeMode);
-                          }),
-                      onTap: () => {},
-                    ),
+                    _ThemeListTile(prefsProvider.themeMode),
                     _LanguageListTile(prefsProvider.locale),
                     const Divider(),
                     AboutListTile(
@@ -274,7 +262,7 @@ class _LanguageListTileState extends State<_LanguageListTile> {
         Provider.of<AppPrefsProvider>(context);
 
     final Map<Locale?, String> languages = {
-      null: "(${l10n.optionSystemLanguage})",
+      null: "(${l10n.optionSystem})",
       // No l10n here. Always show the native language names.
       const Locale("de"): "Deutsch",
       const Locale("fr"): "Français",
@@ -284,7 +272,6 @@ class _LanguageListTileState extends State<_LanguageListTile> {
     return ListTile(
       leading: const Icon(Icons.language),
       title: Text(l10n.language),
-      subtitle: Text(l10n.optionLanguageDesc),
       trailing: DropdownButton<Locale?>(
           value: _selectedLanguage,
           onChanged: (Locale? newValue) {
@@ -295,6 +282,58 @@ class _LanguageListTileState extends State<_LanguageListTile> {
           },
           items: languages.entries
               .map((e) => DropdownMenuItem<Locale?>(
+                    value: e.key,
+                    child: Text(e.value),
+                  ))
+              .toList()),
+      onTap: () => {},
+    );
+  }
+}
+
+class _ThemeListTile extends StatefulWidget {
+  const _ThemeListTile(this.mode, {Key? key}) : super(key: key);
+
+  final ThemeMode? mode;
+
+  @override
+  State<_ThemeListTile> createState() => _ThemeListTileState();
+}
+
+class _ThemeListTileState extends State<_ThemeListTile> {
+  late ThemeMode? _mode;
+
+  @override
+  void initState() {
+    super.initState();
+    _mode = widget.mode;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final AppLocalizations l10n = AppLocalizations.of(context)!;
+    final AppPrefsProvider prefsProvider =
+        Provider.of<AppPrefsProvider>(context);
+
+    final Map<ThemeMode?, String> languages = {
+      null: "(${l10n.optionSystem})",
+      ThemeMode.dark: l10n.optionDarkTheme,
+      ThemeMode.light: l10n.optionLightTheme,
+    };
+
+    return ListTile(
+      leading: const Icon(Icons.color_lens),
+      title: Text(l10n.optionTheme),
+      trailing: DropdownButton<ThemeMode?>(
+          value: _mode,
+          onChanged: (ThemeMode? newValue) {
+            prefsProvider.setThemeMode(newValue);
+            setState(() {
+              _mode = newValue;
+            });
+          },
+          items: languages.entries
+              .map((e) => DropdownMenuItem<ThemeMode?>(
                     value: e.key,
                     child: Text(e.value),
                   ))

@@ -64,21 +64,21 @@
   "@optionPlannedAge": {
     "description": "Age at death"
   },
-  "optionDarkTheme": "Dark theme",
+  "optionTheme": "Theme",
   "@optionDarkTheme": {
-    "description": "Option to enforce the dark theme"
+    "description": "Option to select the theme of the application."
   },
-  "optionDarkThemeDesc": "Enforce dark brightness",
-  "@optionDarkThemeDesc": {
-    "description": "Description for the option to enforce the dark theme"
+  "optionDarkTheme": "Dark",
+  "@optionDarkTheme": {
+    "description": "Label for the dark theme."
   },
-  "optionSystemLanguage": "System language",
-  "@optionSystemLanguage": {
-    "description": "Label for using the language of the operating system."
+  "optionLightTheme": "Light",
+  "@optionLightTheme": {
+    "description": "Label for the light theme."
   },
-  "optionLanguageDesc": "The language of the app",
-  "@optionLanguageDesc": {
-    "description": "Description for the option to set the application language."
+  "optionSystem": "System",
+  "@optionSystem": {
+    "description": "Label for using the language/theme/... of the operating system."
   },
   "numberViewBirthToNow": "The clock shows the time from your birthday {birthday} to now.",
   "@numberViewBirthToNow": {

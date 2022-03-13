@@ -11,7 +11,7 @@ class AppPrefsProvider extends ChangeNotifier {
   ThemeMode? themeMode;
   Locale? locale;
 
-  void setThemeMode(ThemeMode value) async {
+  void setThemeMode(ThemeMode? value) async {
     themeMode = value;
     await _AppPrefs.setThemeMode(value);
     notifyListeners();
@@ -102,8 +102,11 @@ class _AppPrefs {
     return ThemeMode.values[raw];
   }
 
-  static Future<bool> setThemeMode(ThemeMode mode) async {
+  static Future<bool> setThemeMode(ThemeMode? mode) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
+    if (mode == null) {
+      return prefs.remove(_keyThemeMode);
+    }
     return prefs.setInt(_keyThemeMode, mode.index);
   }
 
