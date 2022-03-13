@@ -32,10 +32,12 @@ dependencies:
     sdk: flutter
   flutter_localizations:
     sdk: flutter
+  home_widget: ^0.1.5
   intl: ^0.17.0
   numberpicker: ^2.1.1
   provider: ^6.0.2
   shared_preferences: ^2.0.12
+  workmanager: ^0.4.1
 
 dev_dependencies:
   # It's buggy and does not support round icons

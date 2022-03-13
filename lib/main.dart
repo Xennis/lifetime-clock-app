@@ -1,12 +1,28 @@
+import 'dart:io' show Platform;
+
+import 'package:flutter/foundation.dart' show kIsWeb, kDebugMode;
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
+import 'package:workmanager/workmanager.dart';
 
+import 'home_widget.dart';
 import 'pages/home_page.dart';
 import 'provider/prefs_provider.dart';
 
 void main() {
+  // The home widget is only implemented for Android.
+  //
+  // kIsWeb check required because Platform.isX is not implemented
+  // for web (so it would raise an not implemented error).
+  if (!kIsWeb && Platform.isAndroid) {
+    WidgetsFlutterBinding.ensureInitialized();
+    Workmanager().initialize(callbackDispatcher, isInDebugMode: kDebugMode);
+    Workmanager().registerPeriodicTask('1', 'widgetBackgroundUpdate',
+        frequency: const Duration(seconds: 15));
+  }
+
   runApp(const LifetimeApp());
 }
 

@@ -98,6 +98,13 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  home_widget:
+    dependency: "direct main"
+    description:
+      name: home_widget
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.1.5"
   infinite_listview:
     dependency: transitive
     description:
@@ -334,6 +341,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.3.8"
+  workmanager:
+    dependency: "direct main"
+    description:
+      name: workmanager
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.4.1"
   xdg_directories:
     dependency: transitive
     description:
