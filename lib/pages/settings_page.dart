@@ -43,7 +43,7 @@ class SettingsPage extends StatelessWidget {
                       //  height: 65,
                       //),
                       applicationName: l10n.appTitle,
-                      applicationVersion: l10n.aboutVersion('1.1.0'),
+                      applicationVersion: l10n.aboutVersion('1.2.0'),
                       applicationLegalese: l10n.aboutLegalese('Xennis'),
                     ),
                     ListTile(
