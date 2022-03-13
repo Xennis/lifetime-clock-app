@@ -30,12 +30,13 @@ class SettingsPage extends StatelessWidget {
                   children: [
                     _BirthdayListTile(config.birthdate),
                     _AgeListTile(config.age),
+                    const Divider(),
                     ListTile(
                       leading: const Icon(Icons.color_lens),
                       title: Text(l10n.optionDarkTheme),
                       subtitle: Text(l10n.optionDarkThemeDesc),
                       trailing: Switch(
-                          value: prefsProvider.getThemeMode == ThemeMode.dark,
+                          value: prefsProvider.themeMode == ThemeMode.dark,
                           onChanged: (value) {
                             final ThemeMode themeMode =
                                 value ? ThemeMode.dark : ThemeMode.light;
@@ -43,6 +44,7 @@ class SettingsPage extends StatelessWidget {
                           }),
                       onTap: () => {},
                     ),
+                    _LanguageListTile(prefsProvider.locale),
                     const Divider(),
                     AboutListTile(
                       child: Text(l10n.aboutPage),
@@ -244,6 +246,61 @@ class _AgeListTileState extends State<_AgeListTile> {
         _age = widget.age;
       });
     }
+  }
+}
+
+class _LanguageListTile extends StatefulWidget {
+  const _LanguageListTile(this.locale, {Key? key}) : super(key: key);
+
+  final Locale? locale;
+
+  @override
+  State<_LanguageListTile> createState() => _LanguageListTileState();
+}
+
+class _LanguageListTileState extends State<_LanguageListTile> {
+  late Locale? _selectedLanguage;
+
+  @override
+  void initState() {
+    super.initState();
+    _selectedLanguage = widget.locale;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final AppLocalizations l10n = AppLocalizations.of(context)!;
+    final AppPrefsProvider prefsProvider =
+        Provider.of<AppPrefsProvider>(context);
+
+    final Map<Locale?, String> languages = {
+      null: "(${l10n.optionSystemLanguage})",
+      // No l10n here. Always show the native language names.
+      const Locale("de"): "Deutsch",
+      const Locale("fr"): "Français",
+      const Locale("en"): "English"
+    };
+
+    return ListTile(
+      leading: const Icon(Icons.language),
+      title: Text(l10n.language),
+      subtitle: Text(l10n.optionLanguageDesc),
+      trailing: DropdownButton<Locale?>(
+          value: _selectedLanguage,
+          onChanged: (Locale? newValue) {
+            prefsProvider.setLanguage(newValue);
+            setState(() {
+              _selectedLanguage = newValue;
+            });
+          },
+          items: languages.entries
+              .map((e) => DropdownMenuItem<Locale?>(
+                    value: e.key,
+                    child: Text(e.value),
+                  ))
+              .toList()),
+      onTap: () => {},
+    );
   }
 }
 

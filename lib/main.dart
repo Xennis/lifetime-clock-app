@@ -18,6 +18,8 @@ class LifetimeApp extends StatelessWidget {
     return ChangeNotifierProvider<AppPrefsProvider>(
         create: (_) => AppPrefsProvider(),
         child: Builder(builder: (context) {
+          final AppPrefsProvider prefsProvider =
+              Provider.of<AppPrefsProvider>(context);
           return MaterialApp(
             onGenerateTitle: (context) =>
                 AppLocalizations.of(context)!.appTitle,
@@ -29,8 +31,8 @@ class LifetimeApp extends StatelessWidget {
               brightness: Brightness.dark,
               primarySwatch: Colors.orange,
             ),
-            themeMode: Provider.of<AppPrefsProvider>(context).getThemeMode,
-            home: const HomePage(),
+            themeMode: prefsProvider.themeMode,
+            locale: prefsProvider.locale,
             localizationsDelegates: const [
               AppLocalizations.delegate,
               GlobalMaterialLocalizations.delegate,
@@ -38,6 +40,7 @@ class LifetimeApp extends StatelessWidget {
               GlobalCupertinoLocalizations.delegate,
             ],
             supportedLocales: AppLocalizations.supportedLocales,
+            home: const HomePage(),
           );
         }));
   }

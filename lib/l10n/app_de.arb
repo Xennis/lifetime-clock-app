@@ -11,10 +11,12 @@
   "optionPlannedAge": "Geplantes Alter",
   "optionDarkTheme": "Dark Theme",
   "optionDarkThemeDesc": "Dunkle Helligkeit aktivieren",
+  "optionSystemLanguage": "Systemsprache",
+  "optionLanguageDesc": "Die Sprache der App",
   "numberViewBirthToNow": "Die Uhr zeigt die Zeit von deinem Geburtstag {birthday} bis nun an.",
   "numberViewNowToDeath": "Die Uhr zeigt die Zeit von nun bis zu deinem geplanten Alter von {age} an ({deathDay}).",
   "numberViewModeSwitch": "Hochzählen",
-  "boxViewInfoText": "Jede Box repäsentiert 1 Jahr. Blau für die Vergangenheit, grün die Zukunft und rot das aktuelle Jahr.",
+  "boxViewInfoText": "Jede Box repäsentiert ein Jahr. Blau für die Vergangenheit, grün die Zukunft und rot das aktuelle Jahr.",
   "firstOpenDialogTitle": "Hallo",
   "firstOpenDialogContent": "Tippe dein Geburtstag und geplantes Alter ein, bevor du die App nutzt.",
   "firstOpenDialogOpenSettings": "Einstellungen öffnen",
@@ -26,5 +28,6 @@
   "days": "Tage",
   "hours": "Stunden",
   "minutes": "Minuten",
-  "seconds": "Sekunden"
+  "seconds": "Sekunden",
+  "language": "Sprache"
 }

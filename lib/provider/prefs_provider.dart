@@ -8,18 +8,25 @@ class AppPrefsProvider extends ChangeNotifier {
     _loadFromPrefs();
   }
 
-  ThemeMode? _themeMode;
+  ThemeMode? themeMode;
+  Locale? locale;
 
-  ThemeMode? get getThemeMode => _themeMode;
+  void setThemeMode(ThemeMode value) async {
+    themeMode = value;
+    await _AppPrefs.setThemeMode(value);
+    notifyListeners();
+  }
 
-  void setThemeMode(ThemeMode mode) async {
-    _themeMode = mode;
-    await _AppPrefs.setThemeMode(mode);
+  void setLanguage(Locale? value) async {
+    locale = value;
+    await _AppPrefs.setLocale(value);
     notifyListeners();
   }
 
   _loadFromPrefs() async {
-    _themeMode = await _AppPrefs.getThemeMode() ?? ThemeMode.system;
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    themeMode = _AppPrefs.getThemeMode(prefs);
+    locale = _AppPrefs.getLocale(prefs);
     notifyListeners();
   }
 
@@ -47,6 +54,7 @@ class _AppPrefs {
   static const String _keyBirthdate = 'birthdate';
   static const String _keyAge = 'age';
   static const String _keyThemeMode = 'themeMode';
+  static const String _keyLanguage = 'language';
   static const String _keyNumberViewMode = 'numberViewMode';
 
   static Future<LifetimeConfig?> get() async {
@@ -86,11 +94,10 @@ class _AppPrefs {
     return prefs.setInt(_keyAge, age);
   }
 
-  static Future<ThemeMode?> getThemeMode() async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
+  static ThemeMode? getThemeMode(SharedPreferences prefs) {
     final int? raw = prefs.getInt(_keyThemeMode);
     if (raw == null) {
-      return Future.value(null);
+      return null;
     }
     return ThemeMode.values[raw];
   }
@@ -98,6 +105,22 @@ class _AppPrefs {
   static Future<bool> setThemeMode(ThemeMode mode) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     return prefs.setInt(_keyThemeMode, mode.index);
+  }
+
+  static Locale? getLocale(SharedPreferences prefs) {
+    final String? raw = prefs.getString(_keyLanguage);
+    if (raw == null) {
+      return null;
+    }
+    return Locale(raw);
+  }
+
+  static Future<bool> setLocale(Locale? locale) async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    if (locale == null) {
+      return prefs.remove(_keyLanguage);
+    }
+    return prefs.setString(_keyLanguage, locale.languageCode);
   }
 
   static Future<bool> setNumberViewMode(NumberViewMode mode) async {
