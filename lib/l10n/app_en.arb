@@ -72,6 +72,14 @@
   "@optionDarkThemeDesc": {
     "description": "Description for the option to enforce the dark theme"
   },
+  "optionSystemLanguage": "System language",
+  "@optionSystemLanguage": {
+    "description": "Label for using the language of the operating system."
+  },
+  "optionLanguageDesc": "The language of the app",
+  "@optionLanguageDesc": {
+    "description": "Description for the option to set the application language."
+  },
   "numberViewBirthToNow": "The clock shows the time from your birthday {birthday} to now.",
   "@numberViewBirthToNow": {
     "description": "Label for selecting clock from birthday to the current date",
@@ -105,7 +113,7 @@
   "@numberViewModeSwitch": {
     "description": "Label for switch between count up/down the lifetime."
   },
-  "boxViewInfoText": "Every box represents 1 year. Blue for the past, green the future and red the current one.",
+  "boxViewInfoText": "Every box represents one year. Blue for the past, green the future and red the current one.",
   "@boxViewInfoText": {
     "description": "Explains the user what is shown on the box view."
   },
@@ -129,5 +137,6 @@
   "days": "Days",
   "hours": "Hours",
   "minutes": "Minutes",
-  "seconds": "Seconds"
+  "seconds": "Seconds",
+  "language": "Language"
 }

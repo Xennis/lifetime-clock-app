@@ -1,5 +1,5 @@
 {
-  "appTitle": "Horloge de duree de vie",
+  "appTitle": "Horloge de durée de vie",
   "settingsPage": "Paramètres",
   "aboutPage": "Sur l'application",
   "aboutVersion": "Version {version}",
@@ -11,10 +11,12 @@
   "optionPlannedAge": "Âge prévu",
   "optionDarkTheme": "Thème sombre",
   "optionDarkThemeDesc": "Activer luminosité sombre",
+  "optionSystemLanguage": "Langue du système",
+  "optionLanguageDesc": "La langue de l'application",
   "numberViewBirthToNow": "L'horloge montre le temps de ton anniversaire {birthday} jusqu'à maintenant.",
   "numberViewNowToDeath": "L'horloge montre le temps de maintenant jusqu'à l'âge prévu {age} ({deathDay}).",
   "numberViewModeSwitch": "Incrémenter",
-  "boxViewInfoText": "Chaque case représente une année. Bleu pour le passée, vert pour l'avenir et rouge l'année actuelle.",
+  "boxViewInfoText": "Chaque case représente une année. Bleu pour le passé, vert pour l'avenir et rouge l'année actuelle.",
   "firstOpenDialogTitle": "Salut",
   "firstOpenDialogContent": "Mets ton anniversaire et l'âge prévu.",
   "firstOpenDialogOpenSettings": "Ouvrir des paramètres",
@@ -26,5 +28,6 @@
   "days": "Jours",
   "hours": "Heures",
   "minutes": "Minutes",
-  "seconds": "Secondes"
+  "seconds": "Secondes",
+  "language": "Langue"
 }
