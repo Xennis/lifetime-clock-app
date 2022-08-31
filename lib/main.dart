@@ -17,6 +17,8 @@ void main() {
   // kIsWeb check required because Platform.isX is not implemented
   // for web (so it would raise an not implemented error).
   if (!kIsWeb && Platform.isAndroid) {
+    // Not needed. Instead https://github.com/brucejcooper/Android-Examples/blob/master/WidgetExample/src/com/eightbitcloud/example/widget/ExampleAppWidgetProvider.java
+    // The link above better. But maybe https://stackoverflow.com/questions/30288791/using-timertask-and-timer-with-widget-appwidgetprovider also heps
     WidgetsFlutterBinding.ensureInitialized();
     Workmanager().initialize(callbackDispatcher, isInDebugMode: kDebugMode);
     Workmanager().registerPeriodicTask('1', 'widgetBackgroundUpdate',
