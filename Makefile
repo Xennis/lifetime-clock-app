@@ -1,4 +1,4 @@
-.PHONY: check format format-check lint test launcher-icon release-android release-web
+.PHONY: check format format-check lint test release-android release-web
 
 LIB_DIR = lib/
 TEST_DIR = test/
