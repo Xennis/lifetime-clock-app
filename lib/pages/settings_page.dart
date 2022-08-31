@@ -35,7 +35,6 @@ class SettingsPage extends StatelessWidget {
                     _LanguageListTile(prefsProvider.locale),
                     const Divider(),
                     AboutListTile(
-                      child: Text(l10n.aboutPage),
                       icon: const Icon(Icons.explore),
                       //applicationIcon: Image.asset(
                       //  'assets/app-icon.png',
@@ -45,6 +44,7 @@ class SettingsPage extends StatelessWidget {
                       applicationName: l10n.appTitle,
                       applicationVersion: l10n.aboutVersion('1.2.0'),
                       applicationLegalese: l10n.aboutLegalese('Xennis'),
+                      child: Text(l10n.aboutPage),
                     ),
                     ListTile(
                       leading: const Icon(Icons.info),
