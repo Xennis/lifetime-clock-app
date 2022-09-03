@@ -129,6 +129,10 @@
   "@firstOpenDialogOpenSettings": {
     "description": "Button to open the settings."
   },
+  "rateApp": "Rate the app",
+  "@rateApp": {
+    "description": "Link text to rate the app."
+  },
   "birthday": "Birthday",
   "ok": "ok",
   "cancel": "cancel",
