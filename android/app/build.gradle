@@ -74,6 +74,7 @@ android {
             //}
         }
     }
+    namespace 'org.xennis.apps.lifetime_clock'
 }
 
 flutter {
