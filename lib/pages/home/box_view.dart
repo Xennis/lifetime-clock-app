@@ -75,8 +75,8 @@ class _BoxViewState extends State<BoxView> {
           const Divider(),
           Row(
             children: [
-              Column(
-                children: const [
+              const Column(
+                children: [
                   Icon(
                     Icons.info_outline,
                   )
