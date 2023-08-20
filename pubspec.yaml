@@ -33,7 +33,7 @@ dependencies:
   flutter_localizations:
     sdk: flutter
   intl: ^0.18.1
-  numberpicker: ^2.1.1
+  numberpicker: ^2.1.2
   provider: ^6.0.2
   shared_preferences: ^2.0.12
   url_launcher: ^6.1.5
