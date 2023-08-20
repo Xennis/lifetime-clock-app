@@ -84,8 +84,8 @@ class _NumberViewState extends State<NumberView> {
         const Divider(),
         Row(
           children: [
-            Column(
-              children: const [
+            const Column(
+              children: [
                 Icon(
                   Icons.info_outline,
                 )

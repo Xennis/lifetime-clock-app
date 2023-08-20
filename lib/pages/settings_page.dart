@@ -76,7 +76,7 @@ class SettingsPage extends StatelessWidget {
                 children: <Widget>[
                   RichText(
                     text: TextSpan(
-                      style: Theme.of(context).textTheme.bodyText1,
+                      style: Theme.of(context).textTheme.bodyLarge,
                       children: <InlineSpan>[
                         TextSpan(
                           text: '${l10n.imprintTmgText(5)}:\n\n',
