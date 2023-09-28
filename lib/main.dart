@@ -18,11 +18,9 @@ class LifetimeApp extends StatelessWidget {
     return ChangeNotifierProvider<AppPrefsProvider>(
         create: (_) => AppPrefsProvider(),
         child: Builder(builder: (context) {
-          final AppPrefsProvider prefsProvider =
-              Provider.of<AppPrefsProvider>(context);
+          final AppPrefsProvider prefsProvider = Provider.of<AppPrefsProvider>(context);
           return MaterialApp(
-            onGenerateTitle: (context) =>
-                AppLocalizations.of(context)!.appTitle,
+            onGenerateTitle: (context) => AppLocalizations.of(context)!.appTitle,
             theme: ThemeData(
               brightness: Brightness.light,
               primarySwatch: Colors.blue,
