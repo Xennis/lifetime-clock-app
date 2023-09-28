@@ -6,8 +6,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../../util.dart';
 
 class BoxView extends StatefulWidget {
-  const BoxView({required this.birthday, required this.age, Key? key})
-      : super(key: key);
+  const BoxView({required this.birthday, required this.age, Key? key}) : super(key: key);
 
   final DateTime birthday;
   final int age;
@@ -103,8 +102,7 @@ class _BoxViewState extends State<BoxView> {
 }
 
 class _ColoredRect extends CustomPainter {
-  const _ColoredRect(this.color, {Listenable? repaint})
-      : super(repaint: repaint);
+  const _ColoredRect(this.color, {Listenable? repaint}) : super(repaint: repaint);
 
   final Color color;
 

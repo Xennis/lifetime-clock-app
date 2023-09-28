@@ -45,9 +45,7 @@ class HomePage extends StatelessWidget {
             SingleChildScrollView(
                 child: Padding(
               padding: const EdgeInsets.fromLTRB(10, 25, 10, 20),
-              child: _LoadConfig(
-                  loaded: (config) =>
-                      BoxView(birthday: config.birthdate, age: config.age)),
+              child: _LoadConfig(loaded: (config) => BoxView(birthday: config.birthdate, age: config.age)),
             )),
           ],
         ),
@@ -65,8 +63,7 @@ class HomePage extends StatelessWidget {
           ),
           tooltip: l10n.settingsPage,
           onPressed: () {
-            Navigator.push(context,
-                MaterialPageRoute(builder: (context) => const SettingsPage()));
+            Navigator.push(context, MaterialPageRoute(builder: (context) => const SettingsPage()));
           },
         ),
       )
@@ -112,8 +109,7 @@ class _LoadConfig extends StatelessWidget {
       future: Provider.of<AppPrefsProvider>(context).get,
       builder: (context, snapshot) {
         final LifetimeConfig? config = snapshot.data;
-        if (snapshot.connectionState == ConnectionState.waiting ||
-            snapshot.connectionState == ConnectionState.active) {
+        if (snapshot.connectionState == ConnectionState.waiting || snapshot.connectionState == ConnectionState.active) {
           return const Center(child: CircularProgressIndicator());
         }
         if (config == null) {
@@ -137,10 +133,7 @@ class _LoadConfig extends StatelessWidget {
                 TextButton(
                   child: Text(l10n.firstOpenDialogOpenSettings.toUpperCase()),
                   onPressed: () {
-                    Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const SettingsPage()));
+                    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const SettingsPage()));
                   },
                 )
               ],

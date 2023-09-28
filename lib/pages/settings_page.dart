@@ -16,8 +16,7 @@ class SettingsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final AppLocalizations l10n = AppLocalizations.of(context)!;
-    final AppPrefsProvider prefsProvider =
-        Provider.of<AppPrefsProvider>(context);
+    final AppPrefsProvider prefsProvider = Provider.of<AppPrefsProvider>(context);
 
     return Scaffold(
         appBar: AppBar(
@@ -137,8 +136,7 @@ class _BirthdayListTileState extends State<_BirthdayListTile> {
   @override
   Widget build(BuildContext context) {
     final AppLocalizations l10n = AppLocalizations.of(context)!;
-    final AppPrefsProvider prefsProvider =
-        Provider.of<AppPrefsProvider>(context);
+    final AppPrefsProvider prefsProvider = Provider.of<AppPrefsProvider>(context);
     return ListTile(
       leading: const Icon(Icons.date_range),
       title: Text(l10n.birthday),
@@ -147,13 +145,9 @@ class _BirthdayListTileState extends State<_BirthdayListTile> {
     );
   }
 
-  Future<void> _selectBirthday(
-      BuildContext context, AppPrefsProvider prefsProvider) async {
+  Future<void> _selectBirthday(BuildContext context, AppPrefsProvider prefsProvider) async {
     final DateTime? picked = await showDatePicker(
-        context: context,
-        initialDate: _birthday,
-        firstDate: DateTime(1900),
-        lastDate: DateTime.now());
+        context: context, initialDate: _birthday, firstDate: DateTime(1900), lastDate: DateTime.now());
     if (picked != null && picked != _birthday) {
       prefsProvider.setBirthday(picked);
       setState(() {
@@ -184,8 +178,7 @@ class _AgeListTileState extends State<_AgeListTile> {
   @override
   Widget build(BuildContext context) {
     final AppLocalizations l10n = AppLocalizations.of(context)!;
-    final AppPrefsProvider prefsProvider =
-        Provider.of<AppPrefsProvider>(context);
+    final AppPrefsProvider prefsProvider = Provider.of<AppPrefsProvider>(context);
     return ListTile(
       leading: const Icon(Icons.person_add_alt_1_sharp),
       title: Text(l10n.optionPlannedAge),
@@ -194,8 +187,7 @@ class _AgeListTileState extends State<_AgeListTile> {
     );
   }
 
-  void _selectAge(BuildContext context, AppLocalizations l10n,
-      AppPrefsProvider prefsProvider) async {
+  void _selectAge(BuildContext context, AppLocalizations l10n, AppPrefsProvider prefsProvider) async {
     final int? picked = await showDialog<int>(
         context: context,
         builder: (context) => AlertDialog(
@@ -262,8 +254,7 @@ class _LanguageListTileState extends State<_LanguageListTile> {
   @override
   Widget build(BuildContext context) {
     final AppLocalizations l10n = AppLocalizations.of(context)!;
-    final AppPrefsProvider prefsProvider =
-        Provider.of<AppPrefsProvider>(context);
+    final AppPrefsProvider prefsProvider = Provider.of<AppPrefsProvider>(context);
 
     final Map<Locale?, String> languages = {
       null: "(${l10n.optionSystem})",
@@ -316,8 +307,7 @@ class _ThemeListTileState extends State<_ThemeListTile> {
   @override
   Widget build(BuildContext context) {
     final AppLocalizations l10n = AppLocalizations.of(context)!;
-    final AppPrefsProvider prefsProvider =
-        Provider.of<AppPrefsProvider>(context);
+    final AppPrefsProvider prefsProvider = Provider.of<AppPrefsProvider>(context);
 
     final Map<ThemeMode?, String> languages = {
       null: "(${l10n.optionSystem})",
@@ -355,9 +345,7 @@ class _RateAppListTile extends StatelessWidget {
       return ListTile(
           leading: const Icon(Icons.star),
           title: Text(l10n.rateApp),
-          onTap: () => launchUrl(
-              Uri.https('play.google.com', '/store/apps/details',
-                  {'id': androidAppID}),
+          onTap: () => launchUrl(Uri.https('play.google.com', '/store/apps/details', {'id': androidAppID}),
               mode: LaunchMode.externalApplication));
     }
     return Container();
@@ -365,8 +353,7 @@ class _RateAppListTile extends StatelessWidget {
 }
 
 class _LoadConfig extends StatelessWidget {
-  const _LoadConfig(this.prefsProvider, {required this.loaded, Key? key})
-      : super(key: key);
+  const _LoadConfig(this.prefsProvider, {required this.loaded, Key? key}) : super(key: key);
 
   final AppPrefsProvider prefsProvider;
 
@@ -378,8 +365,7 @@ class _LoadConfig extends StatelessWidget {
       future: Provider.of<AppPrefsProvider>(context).get,
       builder: (context, snapshot) {
         final LifetimeConfig? config = snapshot.data;
-        if (snapshot.connectionState == ConnectionState.waiting ||
-            snapshot.connectionState == ConnectionState.active) {
+        if (snapshot.connectionState == ConnectionState.waiting || snapshot.connectionState == ConnectionState.active) {
           return const Center(child: CircularProgressIndicator());
         }
         if (config != null) {
@@ -391,8 +377,7 @@ class _LoadConfig extends StatelessWidget {
         prefsProvider.setBirthday(birthday);
         const int age = 100;
         prefsProvider.setAge(age);
-        return loaded(LifetimeConfig(birthday, age,
-            numberViewMode: NumberViewMode.birthToNow));
+        return loaded(LifetimeConfig(birthday, age, numberViewMode: NumberViewMode.birthToNow));
       },
     );
   }

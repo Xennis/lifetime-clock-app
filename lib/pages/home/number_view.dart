@@ -10,9 +10,7 @@ import '../../config.dart';
 import '../../util.dart';
 
 class NumberView extends StatefulWidget {
-  const NumberView(
-      {required this.birthday, required this.age, required this.mode, Key? key})
-      : super(key: key);
+  const NumberView({required this.birthday, required this.age, required this.mode, Key? key}) : super(key: key);
 
   final DateTime birthday;
   final int age;
@@ -48,10 +46,8 @@ class _NumberViewState extends State<NumberView> {
   @override
   Widget build(BuildContext context) {
     final AppLocalizations l10n = AppLocalizations.of(context)!;
-    final AppPrefsProvider prefsProvider =
-        Provider.of<AppPrefsProvider>(context);
-    final DateTime deathDay = DateTime(widget.birthday.year + widget.age,
-        widget.birthday.month, widget.birthday.day);
+    final AppPrefsProvider prefsProvider = Provider.of<AppPrefsProvider>(context);
+    final DateTime deathDay = DateTime(widget.birthday.year + widget.age, widget.birthday.month, widget.birthday.day);
 
     int years;
     Duration duration;
@@ -100,9 +96,7 @@ class _NumberViewState extends State<NumberView> {
             Switch(
                 value: _mode == NumberViewMode.birthToNow,
                 onChanged: (value) {
-                  final NumberViewMode mode = value
-                      ? NumberViewMode.birthToNow
-                      : NumberViewMode.nowToDeath;
+                  final NumberViewMode mode = value ? NumberViewMode.birthToNow : NumberViewMode.nowToDeath;
                   if (mode != _mode) {
                     prefsProvider.setNumberViewMode(mode);
                     setState(() {
@@ -119,8 +113,7 @@ class _NumberViewState extends State<NumberView> {
 }
 
 class _NumberDefaultView extends StatelessWidget {
-  const _NumberDefaultView(this.years, this.duration, {Key? key})
-      : super(key: key);
+  const _NumberDefaultView(this.years, this.duration, {Key? key}) : super(key: key);
 
   final int years;
   final Duration duration;
