@@ -1,6 +1,6 @@
 {
-    "name": "Lifetime Clock",
-    "short_name": "Lifetime Clock",
+    "name": "Life Clock",
+    "short_name": "Life Clock",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",
